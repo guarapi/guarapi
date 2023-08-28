@@ -1,0 +1,14 @@
+{
+  "module": {
+    "type": "commonjs",
+    "ignoreDynamic": false
+  },
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false,
+      "decorators": false,
+      "dynamicImport": false
+    }
+  }
+}
