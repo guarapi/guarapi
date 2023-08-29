@@ -9,15 +9,6 @@ To install the project dependencies, run the following command:
 npm i
 ```
 
-## Start
-To start production read code in dist, run the following command:
-
-```bash
-npm start
-```
-
-Starts the application by running the index.js file in the dist folder.
-
 ## Development
 
 To run the project in development mode, run the following command:

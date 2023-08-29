@@ -6,13 +6,24 @@ export type HttpClose = (callback?: () => void) => void;
 
 export type GuarapiLogger = (lvl: 'info' | 'error', data: string | IncomingMessage) => void;
 
-export interface Guarapi {
-  (req: IncomingMessage, res: ServerResponse): void;
-  logger: GuarapiLogger;
-  listen: HttpListen;
-  close: HttpClose;
-}
+export type Middleware = (req: IncomingMessage, res: ServerResponse, next: () => void) => void;
 
 export interface GuarapiConfig {
   logger?: GuarapiLogger;
 }
+
+export interface PluginConfig {
+  name: string;
+  data?: Record<string | number | symbol, unknown>;
+  pre?: Middleware;
+  post?: Middleware;
+}
+
+export interface Guarapi {
+  (req: IncomingMessage, res: ServerResponse): void;
+  listen: HttpListen;
+  close: HttpClose;
+  plugin: (init: (app: Guarapi, config?: GuarapiConfig) => PluginConfig) => void;
+}
+
+export type Plugin = (app: Guarapi, config?: GuarapiConfig) => PluginConfig;
