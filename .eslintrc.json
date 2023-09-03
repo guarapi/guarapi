@@ -3,7 +3,6 @@
     "node": true
   },
   "extends": [
-    "airbnb",
     "plugin:prettier/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -19,7 +18,8 @@
   "ignorePatterns": ["dist", "node_modules"],
   "rules": {
     "import/extensions": ["error", "ignorePackages", { "js": "never", "ts": "never" }],
-    "prettier/prettier": ["error", { "parser": "typescript" }]
+    "prettier/prettier": ["error", { "parser": "typescript" }],
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
   },
   "settings": {
     "import/parsers": {
