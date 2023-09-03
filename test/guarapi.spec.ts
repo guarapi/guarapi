@@ -1,10 +1,13 @@
 import http, { Server } from 'node:http';
-import guarapi from '../src/index';
+import request from 'supertest';
+import guarapi, { middleware } from '../src/index';
 import type { GuarapiConfig } from '../src/types';
 
 describe('Guarapi', () => {
-  afterAll(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
+    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('should create app without config', () => {
@@ -41,5 +44,44 @@ describe('Guarapi', () => {
     jest.spyOn(http, 'createServer').mockImplementation(() => server as unknown as Server);
     app.listen(3000, '0.0.0.0', listenCallback);
     expect(listenCallback).toBeCalled();
+  });
+
+  it('should call all plugins pre/post in request handler pipeline', async () => {
+    const app = guarapi();
+    const server = http.createServer(app);
+
+    const pluginOne = jest.fn();
+
+    const pluginTwoPreHandler = jest.fn();
+    const pluginTwo = () => ({
+      name: 'Plugin Two',
+      pre: (req, res, next) => {
+        pluginTwoPreHandler();
+        next();
+      },
+    });
+
+    const pluginThreePostHandler = jest.fn();
+    const pluginThree = () => ({
+      name: 'Plugin Three',
+      post: (req, res, next) => {
+        pluginThreePostHandler();
+        next();
+      },
+    });
+
+    app.plugin(pluginThree);
+    app.plugin(pluginTwo);
+    app.plugin(pluginOne);
+
+    app.plugin(middleware);
+    app.use(async (req, res) => {
+      res.end('ok');
+    });
+    await request(server).get('/');
+
+    expect(pluginThreePostHandler).toBeCalledTimes(1);
+    expect(pluginTwoPreHandler).toBeCalledTimes(1);
+    expect(pluginOne).toBeCalledTimes(1);
   });
 });

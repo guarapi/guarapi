@@ -6,8 +6,12 @@ export type HttpClose = (callback?: () => void) => void;
 
 export type GuarapiLogger = (lvl: 'info' | 'error', data: string | IncomingMessage) => void;
 
-export type Middleware = (req: IncomingMessage, res: ServerResponse, next: () => void) => void;
-
+export interface Middleware {
+  (req: IncomingMessage, res: ServerResponse, next: (err?: unknown) => void): void;
+}
+export interface MiddlewareError {
+  (error: unknown, req: IncomingMessage, res: ServerResponse, next: (err?: unknown) => void): void;
+}
 export interface GuarapiConfig {
   logger?: GuarapiLogger;
 }

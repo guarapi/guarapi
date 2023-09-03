@@ -27,7 +27,7 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
   };
 
   const plugin = (init: Plugin) => {
-    const { pre, post } = init(GuarapiApp, config);
+    const { pre, post } = init(GuarapiApp, config) || {};
     if (pre) pluginsPre.push(pre);
     if (post) pluginsPost.push(post);
   };

@@ -9,8 +9,8 @@ declare module '../types' {
 const logger: GuarapiLogger = (lvl, data) => {
   const msg = `"${new Date().toISOString()}";${
     typeof data === 'string'
-      ? `"DEBUG";"${data}"`
-      : `"REQUEST";"${[data?.method, data?.url, data?.headers['user-agent']].join('";"')}"`
+      ? `"DEBUG";"${lvl}";"${data}"`
+      : `"REQUEST";"${lvl}";"${[data?.method, data?.url, data?.headers['user-agent']].join('";"')}"`
   }\n`;
   process[lvl === 'error' ? 'stderr' : 'stdout'].write(msg);
 };
@@ -18,6 +18,11 @@ const logger: GuarapiLogger = (lvl, data) => {
 const loggerPlugin: Plugin = (app) => {
   Object.defineProperty(app, 'logger', {
     value: logger,
+  });
+
+  app.use((error, req, res, next) => {
+    logger('error', req);
+    next(error);
   });
 
   return {

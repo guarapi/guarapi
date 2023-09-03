@@ -1,22 +1,31 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
-import { Middleware } from './types';
+import { Middleware, MiddlewareError } from './types';
 
-export default function nextMiddleware<T extends Middleware>(
-  arr: T[],
+function nextMiddleware(
+  arr: (Middleware | MiddlewareError)[],
   req: IncomingMessage,
   res: ServerResponse,
+  error?: unknown,
 ) {
   function next(index: number) {
     const callback = arr[index];
 
     if (callback) {
-      callback(req, res, () => next(index + 1));
-    }
-
-    if (index < arr.length) {
-      next(index + 1);
+      if (error) {
+        (callback as MiddlewareError)(error, req, res, () => {
+          next(index + 1);
+        });
+      } else {
+        (callback as Middleware)(req, res, (err) => {
+          if (err) {
+            throw err;
+          }
+          next(index + 1);
+        });
+      }
     }
   }
 
   next(0);
 }
+export default nextMiddleware;
