@@ -19,7 +19,7 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Install
-        run: npm ci --no-audit
+        run: npm ci --no-audit --platform=linux
 
       - name: Build
         run: npm run build
