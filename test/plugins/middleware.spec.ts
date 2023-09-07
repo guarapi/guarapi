@@ -120,4 +120,26 @@ describe('Guarapi - plugins/middleware', () => {
     expect(middlewareThree).not.toBeCalledTimes(1);
     expect(middlewareFour).toBeCalledTimes(1);
   });
+
+  it('should plugins pipeline not break if it has no final middleware', async () => {
+    const { app, server } = buildApp();
+    const pluginOneHandler = jest.fn();
+    const pluginOne = () => ({
+      name: 'plugin one',
+      pre: (req, res) => {
+        pluginOneHandler();
+        res.end('ok');
+      },
+    });
+
+    app.plugin(pluginOne);
+
+    app.use((req, res, next) => {
+      next();
+    });
+
+    await request(server).get('/');
+
+    expect(pluginOneHandler).toBeCalledTimes(1);
+  });
 });

@@ -22,9 +22,12 @@ const middlewarePlugin: Plugin = (app) => {
   const middlewares: Middleware[] = [];
   const errorMiddlewares: MiddlewareError[] = [];
 
-  const finalErrorHandler: MiddlewareError = (error, req, res, next) => {
-    res.end(JSON.stringify(error));
+  const finalSuccessHandler: (next: () => void) => Middleware = (next) => () => {
     next();
+  };
+
+  const finalErrorHandler: MiddlewareError = (error, _req, res) => {
+    res.end(JSON.stringify({ error }));
   };
 
   Object.defineProperty(app, 'use', {
@@ -39,9 +42,9 @@ const middlewarePlugin: Plugin = (app) => {
 
   return {
     name: 'middleware',
-    pre: (req, res) => {
+    pre: (req, res, next) => {
       try {
-        nextMiddleware(middlewares, req, res);
+        nextMiddleware([...middlewares, finalSuccessHandler(next)], req, res);
       } catch (error) {
         nextMiddleware([...errorMiddlewares, finalErrorHandler], req, res, error);
       }
