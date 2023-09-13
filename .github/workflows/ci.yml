@@ -28,7 +28,7 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test -- --coverage
+        run: npm run test
 
       - name: Upload Coverage to Coveralls
-        run: coveralls < coverage/lcov.info
+        run: jest --coverage --coverageReporters=text-lcov | coveralls
