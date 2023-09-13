@@ -1,16 +1,38 @@
-import http, { Server } from 'node:http';
-import { Guarapi, GuarapiConfig, HttpClose, HttpListen, Middleware, Plugin } from './types';
-import next from './next';
+import http, { IncomingMessage, Server, ServerResponse } from 'node:http';
+import {
+  Guarapi,
+  GuarapiConfig,
+  HttpClose,
+  HttpListen,
+  Middleware,
+  MiddlewareError,
+  Plugin,
+} from './types';
+import nextPipeline from './lib/next-pipeline';
 
 function Guarapi(config?: GuarapiConfig): Guarapi {
   let server: Server | null = null;
   const pluginsPre: Middleware[] = [];
   const pluginsPost: Middleware[] = [];
+  const pluginsError: MiddlewareError[] = [];
+
+  const runPipelineWithFallbackError = (
+    pipeline: Middleware[],
+    req: IncomingMessage,
+    res: ServerResponse,
+  ) => {
+    try {
+      nextPipeline(pipeline, req, res);
+    } catch (error) {
+      nextPipeline(pluginsError, req, res, error);
+    }
+  };
 
   const GuarapiApp: Guarapi = (req, res) => {
-    next(pluginsPre, req, res);
+    runPipelineWithFallbackError(pluginsPre, req, res);
+
     res.once('finish', () => {
-      next(pluginsPost, req, res);
+      runPipelineWithFallbackError(pluginsPost, req, res);
     });
   };
 
@@ -27,9 +49,10 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
   };
 
   const plugin = (init: Plugin) => {
-    const { pre, post } = init(GuarapiApp, config) || {};
+    const { pre, post, error } = init(GuarapiApp, config) || {};
     if (pre) pluginsPre.push(pre);
     if (post) pluginsPost.push(post);
+    if (error) pluginsError.push(error);
   };
 
   GuarapiApp.listen = listen;

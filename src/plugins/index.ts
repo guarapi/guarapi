@@ -1,2 +1,3 @@
-export { default as logger } from './logger';
-export { default as middleware } from './middleware';
+export { default as loggerPlugin } from './logger';
+export { default as middlewarePlugin } from './middleware';
+export { default as routerPlugin } from './router';

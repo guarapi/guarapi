@@ -1,5 +1,5 @@
 import { Middleware, MiddlewareError, Plugin } from '../types';
-import nextMiddleware from '../next';
+import nextMiddleware from '../lib/next-pipeline';
 
 declare module '../types' {
   interface Guarapi {
@@ -22,14 +22,6 @@ const middlewarePlugin: Plugin = (app) => {
   const middlewares: Middleware[] = [];
   const errorMiddlewares: MiddlewareError[] = [];
 
-  const finalSuccessHandler: (next: () => void) => Middleware = (next) => () => {
-    next();
-  };
-
-  const finalErrorHandler: MiddlewareError = (error, _req, res) => {
-    res.end(JSON.stringify({ error }));
-  };
-
   Object.defineProperty(app, 'use', {
     value: (middleware: Middleware | MiddlewareError) => {
       if (getArgsLength(middleware) <= 3) {
@@ -43,11 +35,18 @@ const middlewarePlugin: Plugin = (app) => {
   return {
     name: 'middleware',
     pre: (req, res, next) => {
-      try {
-        nextMiddleware([...middlewares, finalSuccessHandler(next)], req, res);
-      } catch (error) {
-        nextMiddleware([...errorMiddlewares, finalErrorHandler], req, res, error);
-      }
+      const finalSuccessHandler: Middleware = () => {
+        next();
+      };
+
+      nextMiddleware([...middlewares, finalSuccessHandler], req, res);
+    },
+    error: (error, req, res) => {
+      const finalErrorHandler: MiddlewareError = (error) => {
+        res.end(JSON.stringify({ error }));
+      };
+
+      nextMiddleware([...errorMiddlewares, finalErrorHandler], req, res, error);
     },
   };
 };

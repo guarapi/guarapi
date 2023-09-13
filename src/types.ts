@@ -21,6 +21,7 @@ export interface PluginConfig {
   data?: Record<string | number | symbol, unknown>;
   pre?: Middleware;
   post?: Middleware;
+  error?: MiddlewareError;
 }
 
 export interface Guarapi {
