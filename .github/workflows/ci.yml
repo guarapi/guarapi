@@ -21,8 +21,16 @@ jobs:
       - name: Install
         run: npm ci --no-audit --platform=linux
 
+      - name: Install Coveralls
+        run: npm install -g coveralls
+
       - name: Build
         run: npm run build
 
       - name: Test
-        run: npm run test
+        run: npm run test -- --coverage
+
+      - name: Upload Coverage to Coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ vars.COVERALLS_REPO_TOKEN }}
+        run: coveralls < coverage/lcov.info

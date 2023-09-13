@@ -1,14 +1,14 @@
 import http from 'node:http';
 import request from 'supertest';
-import guarapi, { logger, middleware } from '../../src';
+import guarapi, { loggerPlugin, middlewarePlugin } from '../../src';
 
 describe('Guarapi - plugins/logger', () => {
   const buildApp = () => {
     const app = guarapi();
     const server = http.createServer(app);
 
-    app.plugin(middleware);
-    app.plugin(logger);
+    app.plugin(middlewarePlugin);
+    app.plugin(loggerPlugin);
 
     return { app, server };
   };

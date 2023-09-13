@@ -1,6 +1,6 @@
 import http, { Server } from 'node:http';
 import request from 'supertest';
-import guarapi, { middleware } from '../src/index';
+import guarapi, { middlewarePlugin } from '../src/index';
 import type { GuarapiConfig } from '../src/types';
 
 describe('Guarapi', () => {
@@ -74,7 +74,7 @@ describe('Guarapi', () => {
     app.plugin(pluginTwo);
     app.plugin(pluginOne);
 
-    app.plugin(middleware);
+    app.plugin(middlewarePlugin);
     app.use(async (req, res) => {
       res.end('ok');
     });

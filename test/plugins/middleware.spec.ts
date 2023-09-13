@@ -1,13 +1,13 @@
 import http from 'node:http';
 import request from 'supertest';
-import guarapi, { middleware } from '../../src';
+import guarapi, { middlewarePlugin } from '../../src';
 
 describe('Guarapi - plugins/middleware', () => {
   const buildApp = () => {
     const app = guarapi();
     const server = http.createServer(app);
 
-    app.plugin(middleware);
+    app.plugin(middlewarePlugin);
 
     return { app, server };
   };
@@ -33,7 +33,33 @@ describe('Guarapi - plugins/middleware', () => {
       next();
     });
 
-    app.use(async (req, res) => {
+    app.use((req, res) => {
+      res.end('ok');
+    });
+
+    await request(server).get('/');
+
+    expect(middlewareOne).toBeCalledTimes(1);
+    expect(middlewareTwo).toBeCalledTimes(1);
+  });
+
+  it('should run pipeline with async middlewares', async () => {
+    const { app, server } = buildApp();
+    const middlewareOne = jest.fn();
+    const middlewareTwo = jest.fn();
+
+    app.use((req, res, next) => {
+      middlewareOne();
+      next();
+    });
+
+    app.use(async (req, res, next) => {
+      await new Promise((resolve) => setTimeout(resolve));
+      middlewareTwo();
+      next();
+    });
+
+    app.use((req, res) => {
       res.end('ok');
     });
 

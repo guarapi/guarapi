@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
-import { Middleware, MiddlewareError } from './types';
+import { Middleware, MiddlewareError } from '../types';
 
-function nextMiddleware(
+function nextPipeline(
   arr: (Middleware | MiddlewareError)[],
   req: IncomingMessage,
   res: ServerResponse,
@@ -28,4 +28,4 @@ function nextMiddleware(
 
   next(0);
 }
-export default nextMiddleware;
+export default nextPipeline;
