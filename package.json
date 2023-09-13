@@ -27,8 +27,7 @@
     "prebuild": "npm run clean",
     "build": "swc src -d dist && tsc --noEmit false --declaration --emitDeclarationOnly",
     "lint": "eslint ./src",
-    "test": "jest",
-    "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
+    "test": "jest"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.62",

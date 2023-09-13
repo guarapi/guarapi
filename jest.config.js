@@ -4,7 +4,7 @@ module.exports = {
   automock: false,
   testMatch: ['**/*.test.ts', '**/*.spec.ts'],
   coverageDirectory: './coverage',
-  coverageReporters: ['text', 'html', 'json'],
+  coverageReporters: ['lcov', 'text'],
   transform: {
     '^.+\\.(t|j)sx?$': '@swc/jest',
   },

@@ -28,7 +28,9 @@ jobs:
         run: npm run build
 
       - name: Test
-        run: npm run test
+        run: npm run test -- --coverage
 
       - name: Upload Coverage to Coveralls
-        run: npm run coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ vars.COVERALLS_REPO_TOKEN }}
+        run: coveralls < coverage/lcov.info
