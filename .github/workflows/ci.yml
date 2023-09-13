@@ -21,11 +21,14 @@ jobs:
       - name: Install
         run: npm ci --no-audit --platform=linux
 
+      - name: Install Coveralls
+        run: npm install -g coveralls
+
       - name: Build
         run: npm run build
 
       - name: Test
         run: npm run test -- --coverage
 
-      - name: Coveralls
-        uses: coverallsapp/github-action@v2
+      - name: Upload Coverage to Coveralls
+        run: coveralls < coverage/lcov.info
