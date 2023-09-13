@@ -1,5 +1,6 @@
 # Guarapi
 
+![CI](https://github.com/joaoneto/guarapi/actions/workflows/ci.yml/badge.svg?branch=main)
 [![Coverage Status](https://coveralls.io/repos/github/joaoneto/guarapi/badge.svg?branch=main)](https://coveralls.io/github/joaoneto/guarapi?branch=main)
 
 Guarapi is a framework for building web applications with nodejs. It aims to provide a simple and elegant way to create fast and scalable web apps, without sacrificing functionality or performance. Guarapi offers a minimalist and expressive syntax, a flexible routing engine, and a rich set of built-in features. Guarapi is designed to be easy to learn, use, and extend, making it a great choice for beginners and experts alike.
