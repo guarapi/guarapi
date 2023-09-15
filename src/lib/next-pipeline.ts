@@ -6,6 +6,7 @@ function nextPipeline(
   req: IncomingMessage,
   res: ServerResponse,
   error?: unknown,
+  done: (error?: unknown) => void = () => {},
 ) {
   function next(index: number) {
     const callback = arr[index];
@@ -18,11 +19,16 @@ function nextPipeline(
       } else {
         (callback as Middleware)(req, res, (err) => {
           if (err) {
-            throw err;
+            done(err);
+            return;
           }
+
           next(index + 1);
         });
       }
+    } else {
+      done(error);
+      return;
     }
   }
 

@@ -12,7 +12,7 @@ describe('Guarapi - plugins/middleware', () => {
     return { app, server };
   };
 
-  beforeAll(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
     jest.restoreAllMocks();
@@ -76,13 +76,15 @@ describe('Guarapi - plugins/middleware', () => {
     const middlewareThree = jest.fn();
     const middlewareFour = jest.fn();
 
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
     app.use((req, res, next) => {
       middlewareOne();
       next();
     });
 
-    app.use((_req, _res, _next) => {
-      throw new Error('Unexpected error');
+    app.use(() => {
+      throw new Error('You should catch errors and pass in next function');
     });
 
     app.use((req, res, next) => {
@@ -96,16 +98,20 @@ describe('Guarapi - plugins/middleware', () => {
     });
 
     app.use((error, req, res, _next) => {
-      middlewareFour();
+      middlewareFour(error);
       res.end('ERROR');
     });
 
     await request(server).get('/');
 
+    expect(console.error).toBeCalledWith('Unhandled sync rejection detected');
     expect(middlewareOne).toBeCalledTimes(1);
-    expect(middlewareTwo).not.toBeCalledTimes(1);
-    expect(middlewareThree).not.toBeCalledTimes(1);
+    expect(middlewareTwo).not.toBeCalled();
+    expect(middlewareThree).not.toBeCalled();
     expect(middlewareFour).toBeCalledTimes(1);
+    expect(middlewareFour).toBeCalledWith(
+      new Error('You should catch errors and pass in next function'),
+    );
   });
 
   it('should run pipeline with next param error handle', async () => {

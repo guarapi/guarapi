@@ -61,13 +61,9 @@ const routerPlugin: Plugin = () => {
   return {
     name: 'router',
     pre: (req, res, next) => {
-      const finalSuccessHandler: Middleware = () => {
-        next();
-      };
-
       if (req.method && req.url) {
         const handlers = matchRoutes(req.method as MethodsKeys, req.url);
-        nextPipeline([...handlers, finalSuccessHandler], req, res);
+        nextPipeline(handlers, req, res, null, next);
       } else {
         next(new Error('Not Found'));
       }
