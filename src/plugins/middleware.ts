@@ -35,18 +35,12 @@ const middlewarePlugin: Plugin = (app) => {
   return {
     name: 'middleware',
     pre: (req, res, next) => {
-      const finalSuccessHandler: Middleware = () => {
-        next();
-      };
-
-      nextMiddleware([...middlewares, finalSuccessHandler], req, res);
+      nextMiddleware(middlewares, req, res, null, next);
     },
     error: (error, req, res) => {
-      const finalErrorHandler: MiddlewareError = (error) => {
+      nextMiddleware(errorMiddlewares, req, res, error, () => {
         res.end(JSON.stringify({ error }));
-      };
-
-      nextMiddleware([...errorMiddlewares, finalErrorHandler], req, res, error);
+      });
     },
   };
 };

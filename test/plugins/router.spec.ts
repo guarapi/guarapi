@@ -12,7 +12,7 @@ describe('Guarapi - plugins/router', () => {
     return { app, server };
   };
 
-  beforeAll(() => {
+  beforeEach(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
     jest.restoreAllMocks();
@@ -103,6 +103,29 @@ describe('Guarapi - plugins/router', () => {
 
     await request(server).get('/');
 
+    expect(routeOne).toBeCalledTimes(1);
+    expect(routeTwo).not.toBeCalled();
+  });
+
+  it('should route with unhandled sync errors', async () => {
+    const { server } = buildApp();
+    const routeOne = jest.fn();
+    const routeTwo = jest.fn();
+
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    Router.get('/', () => {
+      routeOne();
+      throw new Error('Internal server error');
+    });
+
+    Router.get('/', () => {
+      routeTwo();
+    });
+
+    await request(server).get('/');
+
+    expect(console.error).toBeCalledWith('Unhandled sync rejection detected');
     expect(routeOne).toBeCalledTimes(1);
     expect(routeTwo).not.toBeCalled();
   });

@@ -22,9 +22,14 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
     res: ServerResponse,
   ) => {
     try {
-      nextPipeline(pipeline, req, res);
-    } catch (error) {
-      nextPipeline(pluginsError, req, res, error);
+      nextPipeline(pipeline, req, res, null, (err) => {
+        if (err) {
+          nextPipeline(pluginsError, req, res, err);
+        }
+      });
+    } catch (err) {
+      console.error('Unhandled sync rejection detected');
+      nextPipeline(pluginsError, req, res, err);
     }
   };
 

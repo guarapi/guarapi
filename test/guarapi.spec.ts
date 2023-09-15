@@ -12,6 +12,7 @@ describe('Guarapi', () => {
 
   it('should create app without config', () => {
     const app = guarapi();
+
     expect(app).toHaveProperty('logger');
     expect(app).toHaveProperty('listen');
   });
@@ -19,6 +20,7 @@ describe('Guarapi', () => {
   it('should create app with empty config object', () => {
     const config: GuarapiConfig = {};
     const app = guarapi(config);
+
     expect(app).toHaveProperty('logger');
     expect(app).toHaveProperty('listen');
   });
@@ -28,6 +30,7 @@ describe('Guarapi', () => {
       logger: () => null,
     };
     const app = guarapi(config);
+
     expect(app).toHaveProperty('logger');
     expect(app).toHaveProperty('listen');
   });
@@ -41,9 +44,30 @@ describe('Guarapi', () => {
     const server = {
       listen: jest.fn((_port?: number, _host?: string, cb?: () => void) => cb && cb()),
     };
+
     jest.spyOn(http, 'createServer').mockImplementation(() => server as unknown as Server);
+
     app.listen(3000, '0.0.0.0', listenCallback);
+
     expect(listenCallback).toBeCalled();
+  });
+
+  it('should app call listen and close callbacks', () => {
+    const app = guarapi();
+    const listenCallback = jest.fn();
+    const closeCallback = jest.fn();
+    const server = {
+      listen: jest.fn((_port?: number, _host?: string, cb?: () => void) => cb && cb()),
+      close: jest.fn((cb?: () => void) => cb && cb()),
+    };
+
+    jest.spyOn(http, 'createServer').mockImplementation(() => server as unknown as Server);
+
+    app.listen(3000, '0.0.0.0', listenCallback);
+    app.close(closeCallback);
+
+    expect(listenCallback).toBeCalled();
+    expect(closeCallback).toBeCalled();
   });
 
   it('should call all plugins pre/post in request handler pipeline', async () => {
@@ -83,5 +107,12 @@ describe('Guarapi', () => {
     expect(pluginThreePostHandler).toBeCalledTimes(1);
     expect(pluginTwoPreHandler).toBeCalledTimes(1);
     expect(pluginOne).toBeCalledTimes(1);
+  });
+
+  it('should app throw err trying to use plugins not applyed', () => {
+    const app = guarapi();
+
+    expect(() => app.logger('info', 'No info')).toThrow();
+    expect(() => app.use(() => {})).toThrow();
   });
 });
