@@ -10,8 +10,12 @@ npm i guarapi --save
 
 ## Example
 ```typescript
-import { IncomingMessage, ServerResponse } from 'node:http';
-import guarapi, { middlewarePlugin, loggerPlugin, routerPlugin, Router } from 'guarapi';
+import guarapi, {
+  middlewarePlugin,
+  loggerPlugin,
+  routerPlugin,
+  Router,
+} from 'guarapi';
 
 const app = guarapi();
 
@@ -19,7 +23,7 @@ app.plugin(routerPlugin);
 app.plugin(middlewarePlugin);
 app.plugin(loggerPlugin);
 
-Router.get('/', (req: IncomingMessage, res: ServerResponse) => {
+Router.get('/', (req, res) => {
   res.end('ok');
 });
 

@@ -1,10 +1,9 @@
-import { IncomingMessage, ServerResponse } from 'node:http';
-import { Middleware, MiddlewareError } from '../types';
+import { Middleware, MiddlewareError, Request, Response } from '../types';
 
 function nextPipeline(
   arr: (Middleware | MiddlewareError)[],
-  req: IncomingMessage,
-  res: ServerResponse,
+  req: Request,
+  res: Response,
   error?: unknown,
   done: (error?: unknown) => void = () => {},
 ) {

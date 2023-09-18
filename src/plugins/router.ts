@@ -1,14 +1,13 @@
-import { IncomingMessage } from 'node:http';
-import { Middleware, Plugin } from '../types';
+import { URL } from 'node:url';
 import nextPipeline from '../lib/next-pipeline';
 import { MethodsKeys, routes } from '../lib/router';
+import { Middleware, Params, Plugin, Request } from '../types';
+
+const BASE_URL = 'http://localhost/';
 
 const routerPlugin: Plugin = () => {
   const extractRouteParams = (route: string, matchedParams?: string[]) => {
-    const params: Record<
-      string,
-      string | number | null | undefined | (string | number | null | undefined)[]
-    > = {};
+    const params: Params = {};
     const paramNames = route.match(/:([^/]+)/g);
 
     if (paramNames) {
@@ -31,13 +30,16 @@ const routerPlugin: Plugin = () => {
     const methodRoutes = routes.get(method);
 
     if (methodRoutes) {
+      const { pathname, searchParams: query } = new URL(url, BASE_URL);
+
       return methodRoutes.reduce<Middleware[]>((acc, { route, handler }) => {
         const regex = new RegExp(
           `^${route
             .replace(/(\/:[\w_]+[*])$/, '(/[^/]+.*)')
             .replace(/(:[\w_]+[^*/])/g, '([^/]+)')}$`,
         );
-        const match = (url.replace(/\/$/, '') || '/').match(regex);
+
+        const match = pathname.match(regex);
 
         if (match) {
           const params = extractRouteParams(route, match);
@@ -45,8 +47,7 @@ const routerPlugin: Plugin = () => {
           return [
             ...acc,
             (req, res, next) => {
-              // @todo Request interface extending IncomingMessage
-              handler({ ...req, params } as unknown as IncomingMessage, res, next);
+              handler({ ...req, params, query } as Request, res, next);
             },
           ];
         }

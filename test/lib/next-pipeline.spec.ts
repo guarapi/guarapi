@@ -1,5 +1,5 @@
-import { IncomingMessage, ServerResponse } from 'node:http';
 import nextPipeline from '../../src/lib/next-pipeline';
+import { Request, Response } from '../../src/types';
 
 describe('Guarapi - lib/next-pipeline', () => {
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('Guarapi - lib/next-pipeline', () => {
       },
     ];
 
-    nextPipeline(pipeline, {} as IncomingMessage, {} as ServerResponse);
+    nextPipeline(pipeline, {} as Request, {} as Response);
 
     expect(fnOne).toBeCalledTimes(1);
     expect(fnTwo).toBeCalledTimes(1);
@@ -49,7 +49,7 @@ describe('Guarapi - lib/next-pipeline', () => {
       },
     ];
 
-    nextPipeline(pipeline, {} as IncomingMessage, {} as ServerResponse);
+    nextPipeline(pipeline, {} as Request, {} as Response);
   });
 
   it('should run and break pipeline passing an error in next function', () => {
@@ -66,7 +66,7 @@ describe('Guarapi - lib/next-pipeline', () => {
       },
     ];
 
-    nextPipeline(pipeline, {} as IncomingMessage, {} as ServerResponse, null, (err) => {
+    nextPipeline(pipeline, {} as Request, {} as Response, null, (err) => {
       expect(err).toBeInstanceOf(Error);
       expect((err as Error).message).toEqual('Something goes wrong');
       expect(fnOne).toBeCalledTimes(1);
@@ -89,7 +89,7 @@ describe('Guarapi - lib/next-pipeline', () => {
     ];
 
     expect(() => {
-      nextPipeline(pipeline, {} as IncomingMessage, {} as ServerResponse, null, () => {
+      nextPipeline(pipeline, {} as Request, {} as Response, null, () => {
         expect(fnOne).toBeCalledTimes(1);
         expect(fnTwo).not.toBeCalled();
       });
@@ -114,7 +114,7 @@ describe('Guarapi - lib/next-pipeline', () => {
       },
     ];
 
-    nextPipeline(pipeline, {} as IncomingMessage, {} as ServerResponse, null, (err) => {
+    nextPipeline(pipeline, {} as Request, {} as Response, null, (err) => {
       expect(err).toBeInstanceOf(Error);
       expect((err as Error).message).toEqual('Something goes wrong');
       expect(fnOne).not.toBeCalled();
