@@ -1,6 +1,6 @@
 {
   "name": "guarapi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Minimalist, fast, and scalable Node.js web http app framework",
   "keywords": [
     "guarapi",
