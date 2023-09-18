@@ -1,4 +1,4 @@
-import http, { IncomingMessage, Server, ServerResponse } from 'node:http';
+import http, { Server } from 'node:http';
 import {
   Guarapi,
   GuarapiConfig,
@@ -7,6 +7,8 @@ import {
   Middleware,
   MiddlewareError,
   Plugin,
+  Request,
+  Response,
 } from './types';
 import nextPipeline from './lib/next-pipeline';
 
@@ -16,11 +18,7 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
   const pluginsPost: Middleware[] = [];
   const pluginsError: MiddlewareError[] = [];
 
-  const runPipelineWithFallbackError = (
-    pipeline: Middleware[],
-    req: IncomingMessage,
-    res: ServerResponse,
-  ) => {
+  const runPipelineWithFallbackError = (pipeline: Middleware[], req: Request, res: Response) => {
     try {
       nextPipeline(pipeline, req, res, null, (err) => {
         if (err) {
