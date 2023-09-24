@@ -17,6 +17,7 @@ export type Params = Record<
 export interface Request extends IncomingMessage {
   params?: Params;
   query?: URLSearchParams;
+  middlewarePath?: string;
 }
 
 export interface Response extends ServerResponse {}
