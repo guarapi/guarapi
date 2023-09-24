@@ -13,18 +13,24 @@ npm i guarapi --save
 import guarapi, {
   middlewarePlugin,
   loggerPlugin,
-  routerPlugin,
   Router,
 } from 'guarapi';
 
 const app = guarapi();
+const router = Router();
 
-app.plugin(routerPlugin);
 app.plugin(middlewarePlugin);
 app.plugin(loggerPlugin);
 
-Router.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.end('ok');
+});
+
+app.use(router);
+
+app.use((error, _req, res, _next) => {
+  res.statusCode = error ? 500 : 404;
+  res.end(`Error: ${(error as Error)?.message || 'Internal Server Error'}`);
 });
 
 app.listen(3000, '0.0.0.0', () => {
