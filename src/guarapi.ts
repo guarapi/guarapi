@@ -1,4 +1,5 @@
-import http, { Server } from 'node:http';
+import type { Server } from 'node:http';
+import type { Http2Server } from 'node:http2';
 import {
   Guarapi,
   GuarapiConfig,
@@ -10,13 +11,26 @@ import {
   Request,
   Response,
 } from './types';
-import nextPipeline from './lib/next-pipeline';
+import { nextPipeline, createServer } from './lib';
 
 function Guarapi(config?: GuarapiConfig): Guarapi {
-  let server: Server | null = null;
+  let server: Server | Http2Server | null = null;
+  const { serverOptions = { isHTTP2: false } } = config || {};
   const pluginsPre: Middleware[] = [];
   const pluginsPost: Middleware[] = [];
   const pluginsError: MiddlewareError[] = [];
+
+  const patchHttp2Req = (req: Request) => {
+    if (serverOptions.isHTTP2) {
+      const newReq = { ...req } as Request;
+      newReq.url = req.headers[':path'] as string;
+      newReq.method = req.headers[':method'] as string;
+
+      return newReq;
+    }
+
+    return req;
+  };
 
   const runPipelineWithFallbackError = (pipeline: Middleware[], req: Request, res: Response) => {
     try {
@@ -32,16 +46,17 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
   };
 
   const GuarapiApp: Guarapi = (req, res) => {
-    runPipelineWithFallbackError(pluginsPre, req, res);
+    runPipelineWithFallbackError(pluginsPre, patchHttp2Req(req), res);
 
     res.once('finish', () => {
-      runPipelineWithFallbackError(pluginsPost, req, res);
+      runPipelineWithFallbackError(pluginsPost, patchHttp2Req(req), res);
     });
   };
 
   const listen: HttpListen = (port, host, callback) => {
-    server = http.createServer(GuarapiApp);
-    server.listen(port, host, () => {
+    server = createServer(serverOptions, GuarapiApp);
+
+    server!.listen(port, host, () => {
       if (callback) callback();
     });
   };
