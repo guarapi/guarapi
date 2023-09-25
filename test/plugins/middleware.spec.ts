@@ -3,11 +3,13 @@ import request from 'supertest';
 import guarapi, { middlewarePlugin } from '../../src';
 
 describe('Guarapi - plugins/middleware', () => {
-  const buildApp = () => {
+  const buildApp = (plugins = [middlewarePlugin]) => {
     const app = guarapi();
     const server = http.createServer(app);
 
-    app.plugin(middlewarePlugin);
+    plugins.forEach((plugin) => {
+      app.plugin(plugin);
+    });
 
     return { app, server };
   };
@@ -173,5 +175,30 @@ describe('Guarapi - plugins/middleware', () => {
     await request(server).get('/');
 
     expect(pluginOneHandler).toBeCalledTimes(1);
+  });
+
+  it('should pipeline not break without req.url', async () => {
+    const { app, server } = buildApp([]);
+    const pluginOneHandler = jest.fn();
+
+    app.plugin(() => ({
+      name: 'remove req.url plugin',
+      pre: (req, res, next) => {
+        delete req.url;
+        next();
+      },
+    }));
+
+    app.plugin(middlewarePlugin);
+
+    app.use((req, res) => {
+      pluginOneHandler(req.url);
+      res.end();
+    });
+
+    await request(server).get('/').expect(200);
+
+    expect(pluginOneHandler).toBeCalledTimes(1);
+    expect(pluginOneHandler).toBeCalledWith(undefined);
   });
 });

@@ -1,12 +1,5 @@
-import suppertest from 'supertest';
+import { request } from '../utils';
 import guarapi, { GuarapiConfig, Router, createServer, middlewarePlugin } from '../../src';
-
-// fix @types/supertest to receive config
-function request<T>(server: T, config?: { http2?: boolean }) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  return suppertest(server, config);
-}
 
 describe('Guarapi - lib/router', () => {
   const buildApp = (options?: GuarapiConfig) => {

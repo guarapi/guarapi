@@ -33,7 +33,8 @@ const middlewarePlugin: Plugin = (app) => {
       middlewares.push({
         path: middlewarePath,
         handler: (req, res, next) => {
-          (middlewareHandler as Middleware)({ ...req, middlewarePath } as Request, res, next);
+          req.middlewarePath = middlewarePath;
+          (middlewareHandler as Middleware)(req as Request, res, next);
         },
       });
     } else {
