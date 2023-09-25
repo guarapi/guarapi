@@ -1,14 +1,22 @@
 import http, { Server } from 'node:http';
 import http2, { Http2Server } from 'node:http2';
-import request from 'supertest';
-import guarapi, { middlewarePlugin } from '../src/index';
-import type { GuarapiConfig } from '../src/types';
+import guarapi, { createServer, middlewarePlugin } from '../src/index';
+import type { GuarapiConfig, ServerOptions } from '../src/types';
+import { generateCertificates, request } from './utils';
 
 describe('Guarapi', () => {
+  const env = process.env;
+  const { certPem, keyPem } = generateCertificates();
+
   beforeEach(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
     jest.restoreAllMocks();
+    process.env = { ...env };
+  });
+
+  afterEach(() => {
+    process.env = env;
   });
 
   it('should create app without config', () => {
@@ -71,7 +79,7 @@ describe('Guarapi', () => {
 
   it('should call all plugins pre/post in request handler pipeline', async () => {
     const app = guarapi();
-    const server = http.createServer(app);
+    const server = createServer({}, app);
 
     const pluginOne = jest.fn();
 
@@ -113,5 +121,43 @@ describe('Guarapi', () => {
 
     expect(() => app.logger('info', 'No info')).toThrow();
     expect(() => app.use(() => {})).toThrow();
+  });
+
+  it('should app works with https server', async () => {
+    const serverOptions = { isSSL: true, cert: certPem, key: keyPem };
+    const app = guarapi();
+    const server = createServer(serverOptions, app);
+    const httpVersion = jest.fn();
+
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+    app.plugin(middlewarePlugin);
+    app.use((req, res) => {
+      httpVersion(req.httpVersion);
+      res.end('ok');
+    });
+
+    await request(server).get('/').set('Host', 'localhost');
+
+    expect(httpVersion).toBeCalledWith('1.1');
+  });
+
+  it('should app works with http2 ssl server', async () => {
+    const serverOptions: ServerOptions = { isHTTP2: true, isSSL: true, cert: certPem, key: keyPem };
+    const app = guarapi();
+    const server = createServer(serverOptions, app);
+    const httpVersion = jest.fn();
+
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+    app.plugin(middlewarePlugin);
+    app.use((req, res) => {
+      httpVersion(req.httpVersion);
+      res.end('ok');
+    });
+
+    await request(server, { http2: true }).get('/').set('Host', 'localhost');
+
+    expect(httpVersion).toBeCalledWith('2.0');
   });
 });

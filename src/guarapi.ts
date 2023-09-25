@@ -22,11 +22,10 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
 
   const patchHttp2Req = (req: Request) => {
     if (serverOptions.isHTTP2) {
-      const newReq = { ...req } as Request;
-      newReq.url = req.headers[':path'] as string;
-      newReq.method = req.headers[':method'] as string;
+      req.url = req.headers[':path'] as string;
+      req.method = req.headers[':method'] as string;
 
-      return newReq;
+      return req;
     }
 
     return req;

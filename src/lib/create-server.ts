@@ -5,7 +5,7 @@ const createSecureServer = (options: ServerOptions, handler: Middleware) => {
     ? // eslint-disable-next-line @typescript-eslint/no-var-requires
       require('node:http2').createSecureServer
     : // eslint-disable-next-line @typescript-eslint/no-var-requires
-      require('node:http').createSecureServer(options, handler);
+      require('node:https').createServer;
 
   return httpCreateSecureServer(options, handler);
 };
