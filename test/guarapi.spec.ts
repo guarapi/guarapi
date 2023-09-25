@@ -1,4 +1,5 @@
 import http, { Server } from 'node:http';
+import http2, { Http2Server } from 'node:http2';
 import request from 'supertest';
 import guarapi, { middlewarePlugin } from '../src/index';
 import type { GuarapiConfig } from '../src/types';
@@ -26,9 +27,7 @@ describe('Guarapi', () => {
   });
 
   it('should create app with custom log', () => {
-    const config: GuarapiConfig = {
-      logger: () => null,
-    };
+    const config: GuarapiConfig = {};
     const app = guarapi(config);
 
     expect(app).toHaveProperty('logger');
@@ -36,9 +35,7 @@ describe('Guarapi', () => {
   });
 
   it('should app call listen callback', () => {
-    const config: GuarapiConfig = {
-      logger: () => null,
-    };
+    const config: GuarapiConfig = {};
     const app = guarapi(config);
     const listenCallback = jest.fn();
     const server = {
@@ -46,6 +43,7 @@ describe('Guarapi', () => {
     };
 
     jest.spyOn(http, 'createServer').mockImplementation(() => server as unknown as Server);
+    jest.spyOn(http2, 'createServer').mockImplementation(() => server as unknown as Http2Server);
 
     app.listen(3000, '0.0.0.0', listenCallback);
 
@@ -62,6 +60,7 @@ describe('Guarapi', () => {
     };
 
     jest.spyOn(http, 'createServer').mockImplementation(() => server as unknown as Server);
+    jest.spyOn(http2, 'createServer').mockImplementation(() => server as unknown as Http2Server);
 
     app.listen(3000, '0.0.0.0', listenCallback);
     app.close(closeCallback);

@@ -1,4 +1,5 @@
-import { IncomingMessage, ServerResponse } from 'node:http';
+import { IncomingMessage, ServerOptions as HTTPServerOptions, ServerResponse } from 'node:http';
+import { SecureServerOptions as HTTP2SecureServerOptions } from 'node:http2';
 
 export type HttpListen = (port: number, host: string, callback?: () => void) => void;
 
@@ -28,8 +29,15 @@ export interface Middleware {
 export interface MiddlewareError {
   (error: unknown, req: Request, res: Response, next: (err?: unknown) => void): void;
 }
+
+export interface ServerOptions extends HTTPServerOptions, HTTP2SecureServerOptions {
+  isSSL?: boolean;
+  isHTTP2?: boolean;
+}
+
 export interface GuarapiConfig {
   logger?: GuarapiLogger;
+  serverOptions?: ServerOptions;
 }
 
 export interface PluginConfig {

@@ -41,7 +41,7 @@ const middlewarePlugin: Plugin = (app) => {
     }
   }
 
-  function matchMiddlewares(matchPath: string) {
+  function matchMiddlewares(matchPath: string = '') {
     return middlewares.reduce<Middleware[]>((acc, { path, handler }) => {
       if (!matchPath.startsWith(path)) {
         return acc;
