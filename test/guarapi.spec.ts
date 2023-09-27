@@ -160,4 +160,30 @@ describe('Guarapi', () => {
 
     expect(httpVersion).toBeCalledWith('2.0');
   });
+
+  it('should respond with json', async () => {
+    const app = guarapi();
+    const server = createServer({}, app);
+
+    app.plugin(middlewarePlugin);
+
+    app.use((req, res) => {
+      res.json({ ok: true });
+    });
+
+    await request(server).get('/').expect('Content-Type', /json/).expect(200, { ok: true });
+  });
+
+  it('should respond with status 401', async () => {
+    const app = guarapi();
+    const server = createServer({}, app);
+
+    app.plugin(middlewarePlugin);
+
+    app.use((req, res) => {
+      res.status(401).end('Unauthorized');
+    });
+
+    await request(server).get('/').expect(401, 'Unauthorized');
+  });
 });

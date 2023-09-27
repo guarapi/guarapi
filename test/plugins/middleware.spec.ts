@@ -1,11 +1,10 @@
-import http from 'node:http';
 import request from 'supertest';
-import guarapi, { MiddlewareError, middlewarePlugin } from '../../src';
+import guarapi, { MiddlewareError, createServer, middlewarePlugin } from '../../src';
 
 describe('Guarapi - plugins/middleware', () => {
   const buildApp = (plugins = [middlewarePlugin]) => {
     const app = guarapi();
-    const server = http.createServer(app);
+    const server = createServer({}, app);
 
     plugins.forEach((plugin) => {
       app.plugin(plugin);

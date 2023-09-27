@@ -1,11 +1,15 @@
-import http from 'node:http';
 import request from 'supertest';
-import guarapi, { MiddlewareError, bodyParserPlugin, middlewarePlugin } from '../../src';
+import guarapi, {
+  MiddlewareError,
+  bodyParserPlugin,
+  createServer,
+  middlewarePlugin,
+} from '../../src';
 
 describe('Guarapi - plugins/body-parser', () => {
   const buildApp = () => {
     const app = guarapi();
-    const server = http.createServer(app);
+    const server = createServer({}, app);
 
     app.plugin(bodyParserPlugin);
     app.plugin(middlewarePlugin);
