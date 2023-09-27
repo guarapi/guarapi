@@ -1,6 +1,6 @@
 import http from 'node:http';
 import request from 'supertest';
-import guarapi, { middlewarePlugin } from '../../src';
+import guarapi, { MiddlewareError, middlewarePlugin } from '../../src';
 
 describe('Guarapi - plugins/middleware', () => {
   const buildApp = (plugins = [middlewarePlugin]) => {
@@ -99,7 +99,7 @@ describe('Guarapi - plugins/middleware', () => {
       res.end('ok');
     });
 
-    app.use((error, req, res, _next) => {
+    app.use<MiddlewareError>((error, req, res, _next) => {
       middlewareFour(error);
       res.end('ERROR');
     });
@@ -142,7 +142,7 @@ describe('Guarapi - plugins/middleware', () => {
       res.end('ok');
     });
 
-    app.use((error, req, res, _next) => {
+    app.use<MiddlewareError>((error, req, res, _next) => {
       middlewareFour();
       res.end('ERROR');
     });

@@ -1,5 +1,11 @@
 import { request } from '../utils';
-import guarapi, { GuarapiConfig, Router, createServer, middlewarePlugin } from '../../src';
+import guarapi, {
+  GuarapiConfig,
+  MiddlewareError,
+  Router,
+  createServer,
+  middlewarePlugin,
+} from '../../src';
 
 describe('Guarapi - lib/router', () => {
   const buildApp = (options?: GuarapiConfig) => {
@@ -481,12 +487,12 @@ describe('Guarapi - lib/router', () => {
     http1.app.use(router);
     http2.app.use(router);
 
-    http1.app.use((error, _req, res, _next) => {
+    http1.app.use<MiddlewareError>((error, _req, res, _next) => {
       catchError((error as Error).message);
       res.end();
     });
 
-    http2.app.use((error, _req, res, _next) => {
+    http2.app.use<MiddlewareError>((error, _req, res, _next) => {
       catchError((error as Error).message);
       res.end();
     });
