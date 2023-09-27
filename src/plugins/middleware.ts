@@ -3,8 +3,8 @@ import nextMiddleware from '../lib/next-pipeline';
 
 declare module '../types' {
   interface Guarapi {
-    use(middleware: Middleware | MiddlewareError): void;
-    use(path: string, middleware: Middleware | MiddlewareError): void;
+    use<T = Middleware>(middleware: T): void;
+    use<T = Middleware>(path: string, middleware: T): void;
   }
 }
 
@@ -21,8 +21,6 @@ const middlewarePlugin: Plugin = (app) => {
   const middlewares: { path: string; handler: Middleware }[] = [];
   const errorMiddlewares: MiddlewareError[] = [];
 
-  function use(middleware: Middleware | MiddlewareError): void;
-  function use(path: string, middleware: Middleware | MiddlewareError): void;
   function use<P, M>(path: P, middleware?: M): void {
     const middlewarePath = (typeof path === 'string' ? path : '/').replace(/\/?$/, '');
     const middlewareHandler = (typeof path && middleware ? middleware : path) as

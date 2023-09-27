@@ -14,6 +14,7 @@ import guarapi, {
   middlewarePlugin,
   loggerPlugin,
   Router,
+  MiddlewareError,
 } from 'guarapi';
 
 const app = guarapi();
@@ -28,8 +29,8 @@ router.get('/', (req, res) => {
 
 app.use(router);
 
-app.use((error, _req, res, _next) => {
-  res.statusCode = error ? 500 : 404;
+app.use<MiddlewareError>((error, _req, res, _next) => {
+  res.statusCode = (error as Error)?.message === 'Not Found' ? 404 : 500;
   res.end(`Error: ${(error as Error)?.message || 'Internal Server Error'}`);
 });
 

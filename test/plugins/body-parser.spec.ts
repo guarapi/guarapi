@@ -1,6 +1,6 @@
 import http from 'node:http';
 import request from 'supertest';
-import guarapi, { bodyParserPlugin, middlewarePlugin } from '../../src';
+import guarapi, { MiddlewareError, bodyParserPlugin, middlewarePlugin } from '../../src';
 
 describe('Guarapi - plugins/body-parser', () => {
   const buildApp = () => {
@@ -69,7 +69,7 @@ describe('Guarapi - plugins/body-parser', () => {
       res.end();
     });
 
-    app.use((error, req, res, _next) => {
+    app.use<MiddlewareError>((error, req, res, _next) => {
       errorHandler();
       res.end();
     });
