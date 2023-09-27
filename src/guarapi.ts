@@ -20,7 +20,7 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
   const pluginsPost: Middleware[] = [];
   const pluginsError: MiddlewareError[] = [];
 
-  const patchHttp2Req = (req: Request) => {
+  const patchReq = (req: Request) => {
     if (serverOptions.isHTTP2) {
       req.url = req.headers[':path'] as string;
       req.method = req.headers[':method'] as string;
@@ -29,6 +29,23 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
     }
 
     return req;
+  };
+
+  const patchRes = (res: Response) => {
+    res.status = (statusCode) => {
+      res.statusCode = statusCode;
+
+      return res;
+    };
+
+    res.json = (obj) => {
+      res.setHeader('content-type', 'application/json; charset=utf-8');
+      res.end(JSON.stringify(obj));
+
+      return res;
+    };
+
+    return res;
   };
 
   const runPipelineWithFallbackError = (pipeline: Middleware[], req: Request, res: Response) => {
@@ -45,10 +62,10 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
   };
 
   const GuarapiApp: Guarapi = (req, res) => {
-    runPipelineWithFallbackError(pluginsPre, patchHttp2Req(req), res);
+    runPipelineWithFallbackError(pluginsPre, patchReq(req), patchRes(res));
 
     res.once('finish', () => {
-      runPipelineWithFallbackError(pluginsPost, patchHttp2Req(req), res);
+      runPipelineWithFallbackError(pluginsPost, patchReq(req), patchRes(res));
     });
   };
 

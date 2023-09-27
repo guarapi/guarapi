@@ -27,11 +27,15 @@ router.get('/', (req, res) => {
   res.end('ok');
 });
 
+router.get('/respond-with-json', (req, res) => {
+  res.json({ ok: true });
+});
+
 app.use(router);
 
 app.use<MiddlewareError>((error, _req, res, _next) => {
-  res.statusCode = (error as Error)?.message === 'Not Found' ? 404 : 500;
-  res.end(`Error: ${(error as Error)?.message || 'Internal Server Error'}`);
+  res.status((error as Error)?.message === 'Not Found' ? 404 : 500);
+  res.json({ error: (error as Error)?.message || 'Internal Server Error' });
 });
 
 app.listen(3000, '0.0.0.0', () => {

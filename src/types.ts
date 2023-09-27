@@ -21,7 +21,10 @@ export interface Request extends IncomingMessage {
   middlewarePath?: string;
 }
 
-export interface Response extends ServerResponse {}
+export interface Response extends ServerResponse {
+  status: (statusCode: number) => Response;
+  json: (obj: unknown) => Response;
+}
 
 export interface Middleware {
   (req: Request, res: Response, next: (err?: unknown) => void): void;
