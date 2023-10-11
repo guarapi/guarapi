@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-guarapi",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Guarapi eslint recommended code style",
   "keywords": [
     "guarapi",
