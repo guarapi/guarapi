@@ -8,6 +8,7 @@ Thank you for your interest in contributing to Guarapi! We appreciate your suppo
    - [Installation](#installation)
 2. [Development](#development)
    - [Project Structure](#project-structure)
+   - [Monorepo Structure](#monorepo-structure)
    - [Core Plugins](#core-plugins)
 3. [Testing](#testing)
    - [Creating Tests](#creating-tests)
@@ -23,36 +24,41 @@ Thank you for your interest in contributing to Guarapi! We appreciate your suppo
 
 Before you start contributing to Guarapi, please ensure you have the following prerequisites installed on your system:
 
-- Node.js and npm (Recommended package manager)
 - Git
+- Node.js
+- pnpm
 
 ### Installation
 
 1. Clone the Guarapi repository to your local machine:
 
-   ```shell
-   git clone https://github.com/your-username/guarapi.git
-   ```
+```shell
+git clone https://github.com/guarapi/guarapi.git
+```
 
 2. Navigate to the project directory:
 
-   ```shell
-   cd guarapi
-   ```
+```shell
+cd guarapi
+```
 
-3. Install project dependencies using npm:
+3. Install project dependencies using pnpm (our preferred package manager):
 
-   ```shell
-   npm install
-   ```
+```shell
+pnpm install
+```
 
 ## Development
 
 ### Project Structure
 
-The Guarapi project follows a specific structure:
+The Guarapi project follows a specific structure within the monorepo:
 
-- **Core Plugins**: Core plugins are located in the `src/plugins` directory. You can find the interface definition for plugins in `src/types.ts`. These plugins consist of a function that is executed during Guarapi initialization and can be used to patch the application.
+- **Core Plugins**: Core plugins are located in the `packages/guarapi/src/plugins` directory. You can find the interface definition for plugins in `packages/guarapi/src/types.ts`. These plugins consist of a function that is executed during Guarapi initialization and can be used to patch the application.
+
+### Monorepo Structure
+
+The Guarapi project now utilizes a monorepo structure. Different packages, including Guarapi and eslint-config-guarapi, are organized in the `packages` directory within the monorepo.
 
 ### Core Plugins
 
@@ -62,14 +68,14 @@ If you plan to create or modify core plugins, please ensure that your changes al
 
 ### Creating Tests
 
-When adding new features or making changes, it's crucial to create tests to maintain code quality. Test files should be placed in the `./test` folder. Please ensure your tests cover the functionality you're working on.
+When adding new features or making changes, it's crucial to create tests to maintain code quality. Test files should be placed in the `packages/guarapi/test` directory. Please ensure your tests cover the functionality you're working on.
 
 ### Running Tests
 
 You can run the tests using the following command:
 
 ```shell
-npm run test
+pnpm run test
 ```
 
 Make sure all tests pass before submitting your contributions.
@@ -78,39 +84,23 @@ Make sure all tests pass before submitting your contributions.
 
 Local linking is a helpful way to develop and test Guarapi locally while working on other projects that depend on it.
 
-### Linking Guarapi
-
-To locally link Guarapi, follow these steps:
-
-1. Navigate to the Guarapi directory:
-
-   ```shell
-   cd guarapi
-   ```
-
-2. Link Guarapi locally using npm:
-
-   ```shell
-   npm link
-   ```
-
-### Linking with Example Project
+### Linking with Guarapi
 
 If you have an example project that depends on Guarapi and you want to link it locally for testing, follow these steps:
 
 1. Navigate to your Guarapi example project's directory:
 
-   ```shell
-   cd guarapi-example-project
-   ```
+```shell
+cd examples/example-project
+```
 
 2. Link Guarapi to your example project:
 
-   ```shell
-   npm link guarapi
-   ```
+```shell
+pnpm link ../path/of/guarapi
+```
 
-Now, your example project will use the locally linked Guarapi for development and testing.
+Now, your example project will use the locally linked Guarapi for development and testing. For more details, please see [pnpm link dir](https://pnpm.io/cli/link#difference-between-pnpm-link-dir-and-pnpm-link---dir-dir)
 
 ## Code of Conduct
 

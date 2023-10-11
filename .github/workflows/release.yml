@@ -1,15 +1,21 @@
-name: CI
+name: Release
 
 on:
   push:
     branches: [main, next]
-  pull_request:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  build:
+  release:
+    if: github.repository == 'guarapi/guarapi'
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+      issues: write
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -32,5 +38,12 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Test
-        run: pnpm test
+      - name: Create Release PR or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm run version
+          publish: pnpm run publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
