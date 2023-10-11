@@ -66,7 +66,9 @@ function routerBuilder() {
           return [
             ...acc,
             (req, res, next) => {
-              handler({ ...req, params, query } as Request, res, next);
+              req.params = params;
+              req.query = query;
+              handler(req as Request, res, next);
             },
           ];
         }

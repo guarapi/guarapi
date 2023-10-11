@@ -1,4 +1,4 @@
-import { GuarapiLogger, Plugin } from '../types';
+import { GuarapiLogger, MiddlewareError, Plugin } from '../types';
 
 declare module '../types' {
   interface Guarapi {
@@ -20,7 +20,7 @@ const loggerPlugin: Plugin = (app) => {
     value: logger,
   });
 
-  app.use((error, req, res, next) => {
+  app.use<MiddlewareError>((error, req, _res, next) => {
     logger('error', req);
     next(error);
   });

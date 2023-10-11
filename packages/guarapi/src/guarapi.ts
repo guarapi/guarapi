@@ -1,4 +1,5 @@
-import http, { Server } from 'node:http';
+import type { Server } from 'node:http';
+import type { Http2Server } from 'node:http2';
 import {
   Guarapi,
   GuarapiConfig,
@@ -10,13 +11,42 @@ import {
   Request,
   Response,
 } from './types';
-import nextPipeline from './lib/next-pipeline';
+import { nextPipeline, createServer } from './lib';
 
 function Guarapi(config?: GuarapiConfig): Guarapi {
-  let server: Server | null = null;
+  let server: Server | Http2Server | null = null;
+  const { serverOptions = { isHTTP2: false } } = config || {};
   const pluginsPre: Middleware[] = [];
   const pluginsPost: Middleware[] = [];
   const pluginsError: MiddlewareError[] = [];
+
+  const patchReq = (req: Request) => {
+    if (serverOptions.isHTTP2) {
+      req.url = req.headers[':path'] as string;
+      req.method = req.headers[':method'] as string;
+
+      return req;
+    }
+
+    return req;
+  };
+
+  const patchRes = (res: Response) => {
+    res.status = (statusCode) => {
+      res.statusCode = statusCode;
+
+      return res;
+    };
+
+    res.json = (obj) => {
+      res.setHeader('content-type', 'application/json; charset=utf-8');
+      res.end(JSON.stringify(obj));
+
+      return res;
+    };
+
+    return res;
+  };
 
   const runPipelineWithFallbackError = (pipeline: Middleware[], req: Request, res: Response) => {
     try {
@@ -32,16 +62,17 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
   };
 
   const GuarapiApp: Guarapi = (req, res) => {
-    runPipelineWithFallbackError(pluginsPre, req, res);
+    runPipelineWithFallbackError(pluginsPre, patchReq(req), patchRes(res));
 
     res.once('finish', () => {
-      runPipelineWithFallbackError(pluginsPost, req, res);
+      runPipelineWithFallbackError(pluginsPost, patchReq(req), patchRes(res));
     });
   };
 
   const listen: HttpListen = (port, host, callback) => {
-    server = http.createServer(GuarapiApp);
-    server.listen(port, host, () => {
+    server = createServer(serverOptions, GuarapiApp);
+
+    server!.listen(port, host, () => {
       if (callback) callback();
     });
   };
