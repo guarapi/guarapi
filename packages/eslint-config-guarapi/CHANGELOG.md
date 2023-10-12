@@ -1,5 +1,11 @@
 # eslint-config-guarapi
 
+## 0.1.1
+
+### Patch Changes
+
+- [#18](https://github.com/guarapi/guarapi/pull/18) [`ae2e31f`](https://github.com/guarapi/guarapi/commit/ae2e31fb7797264a80538ae6e22fd5123c64ab2f) Thanks [@joaoneto](https://github.com/joaoneto)! - rename eslint-config-guarapi to scoped @guarapi/eslint-config-guarapi
+
 ## 0.1.0
 
 ### Minor Changes
