@@ -10,6 +10,10 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        packages:
+          - guarapi
 
     steps:
       - name: Checkout
@@ -29,8 +33,26 @@ jobs:
       - name: Install
         run: pnpm install
 
+      - name: Test
+        run: pnpm test -- -- --coverage
+
       - name: Build
         run: pnpm build
 
-      - name: Test
-        run: pnpm test
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@v2
+        with:
+          flag-name: run-${{ join(matrix.*, '-') }}
+          base-path: packages/${{ join(matrix.*, '-') }}
+          parallel: true
+
+  finish:
+    needs: build
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@v2
+      with:
+        parallel-finished: true
+        carryforward: "run-guarapi"
