@@ -13,10 +13,12 @@ Thank you for your interest in contributing to Guarapi! We appreciate your suppo
 3. [Testing](#testing)
    - [Creating Tests](#creating-tests)
    - [Running Tests](#running-tests)
-4. [Local Linking](#local-linking)
+4. [Release](#release)
+5. [Local Linking](#local-linking)
    - [Linking Guarapi](#linking-guarapi)
    - [Linking with Example Project](#linking-with-example-project)
-5. [Code of Conduct](#code-of-conduct)
+6. [Examples](#examples)
+7. [Code of Conduct](#code-of-conduct)
 
 ## Getting Started
 
@@ -80,18 +82,28 @@ pnpm run test
 
 Make sure all tests pass before submitting your contributions.
 
+## Release
+
+For releases, we use [changesets](https://github.com/changesets/changesets) to generate changesets. When you need to bump the major, minor, or patch version, execute:
+
+```shell
+pnpm exec changeset
+```
+
+This command generates the necessary changeset files. The release workflow uses these changesets to bump the version and generate changelogs. For more information, see [Automating Changesets](https://github.com/changesets/changesets/blob/main/docs/automating-changesets.md).
+
 ## Local Linking
 
 Local linking is a helpful way to develop and test Guarapi locally while working on other projects that depend on it.
 
-### Linking with Guarapi
+### Linking Guarapi
 
 If you have an example project that depends on Guarapi and you want to link it locally for testing, follow these steps:
 
 1. Navigate to your Guarapi example project's directory:
 
 ```shell
-cd examples/example-project
+cd example-project
 ```
 
 2. Link Guarapi to your example project:
@@ -100,10 +112,29 @@ cd examples/example-project
 pnpm link ../path/of/guarapi
 ```
 
-Now, your example project will use the locally linked Guarapi for development and testing. For more details, please see [pnpm link dir](https://pnpm.io/cli/link#difference-between-pnpm-link-dir-and-pnpm-link---dir-dir)
+Now, your example project will use the locally linked Guarapi for development and testing. For more details, please see [pnpm link dir](https://pnpm.io/cli/link#difference-between-pnpm-link-dir-and-pnpm-link---dir-dir).
+
+## Examples
+
+To run the examples, use the following command format:
+
+```shell
+pnpm --filter="{./examples/example-project}" [cmd]
+```
+
+For example:
+
+```shell
+pnpm --filter="{./examples/basic-api}" dev
+```
+
+This command allows you to execute the specified command within the example project's directory.
 
 ## Code of Conduct
 
 Please review our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing. We expect all contributors to adhere to these guidelines to ensure a positive and inclusive environment for everyone involved in the Guarapi project.
 
 Thank you for considering contributing to Guarapi. Your contributions are valuable, and we look forward to working with you!
+```
+
+Lembre-se de substituir `guarapi/guarapi` e `/path/of/guarapi` pelos detalhes relevantes do repositório do Guarapi e o caminho local do Guarapi no seu sistema. Certifique

@@ -3,14 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "workspaces": [
+    "examples/*",
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
-    "clean": "turbo run clean",
-    "lint": "turbo run lint",
-    "start": "turbo run start",
-    "test": "turbo run test",
+    "build": "turbo run build --filter={./packages/*}",
+    "clean": "turbo run clean --filter={./packages/*}",
+    "lint": "turbo run lint --filter={./packages/*}",
+    "start": "turbo run start --filter={./packages/*}",
+    "test": "turbo run test --filter={./packages/*}",
     "version": "changeset version && pnpm install --no-frozen-lockfile",
     "publish": "changeset publish"
   },
