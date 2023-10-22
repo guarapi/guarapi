@@ -1,5 +1,11 @@
 # guarapi
 
+## 1.0.2
+
+### Patch Changes
+
+- [#23](https://github.com/guarapi/guarapi/pull/23) [`6e86bff`](https://github.com/guarapi/guarapi/commit/6e86bffca617a60a771226d731d88a938a685778) Thanks [@joaoneto](https://github.com/joaoneto)! - fix missing dev dependency eslint
+
 ## 1.0.1
 
 ### Patch Changes
