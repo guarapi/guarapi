@@ -1,49 +1,39 @@
 {
-  "name": "guarapi",
-  "version": "1.0.1",
-  "description": "Minimalist, fast, and scalable Node.js web http app framework",
+  "name": "@guarapi/create-guarapi-app",
+  "version": "0.0.0",
+  "description": "Guarapi create app starter kit",
   "keywords": [
     "guarapi",
-    "web",
-    "framework",
-    "nodejs",
-    "http",
-    "api",
-    "backend"
+    "create"
   ],
   "author": "João Neto <joaopintoneto@gmail.com>",
   "license": "MIT",
   "homepage": "https://github.com/guarapi/guarapi#readme",
   "repository": "github:guarapi/guarapi",
-  "type": "commonjs",
-  "types": "dist/index.d.ts",
-  "main": "dist/index.js",
   "prettier": "@guarapi/eslint-config-guarapi/prettierrc.js",
   "files": [
     "dist"
   ],
+  "bin": {
+    "create-guarapi-app": "./dist/index.js"
+  },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "pnpm run clean && swc src -d dist && tsc --noEmit false --declaration --emitDeclarationOnly",
+    "build": "pnpm run clean && swc src -d dist && pnpm run types",
     "lint": "eslint ./src",
-    "test": "jest"
+    "types": "tsc --noEmit false --declaration --emitDeclarationOnly"
   },
   "devDependencies": {
     "@guarapi/eslint-config-guarapi": "^0.1.1",
     "@swc/cli": "^0.1.62",
     "@swc/core": "^1.3.80",
-    "@swc/jest": "^0.2.29",
     "@swc/register": "^0.1.10",
-    "@types/jest": "^29.5.4",
     "@types/node": "^20.5.6",
     "@types/node-forge": "^1.3.6",
     "@types/supertest": "^2.0.13",
     "eslint": "^8.51.0",
-    "jest": "^29.6.4",
-    "node-forge": "^1.3.1",
     "prettier": "^3.0.2",
     "rimraf": "^5.0.1",
-    "supertest": "^6.3.3",
     "typescript": "^5.2.2"
   }
 }
