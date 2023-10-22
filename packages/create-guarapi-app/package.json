@@ -1,6 +1,6 @@
 {
   "name": "@guarapi/create-guarapi-app",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Guarapi create app starter kit",
   "keywords": [
     "guarapi",
