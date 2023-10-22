@@ -1,6 +1,5 @@
-# eslint-config-guarapi
+# @guarapi/eslint-config-guarapi
 
-[![Coverage Status](https://coveralls.io/repos/github/guarapi/guarapi/badge.svg?branch=main)](https://coveralls.io/github/guarapi/guarapi?branch=main)
 [![npm version](https://badge.fury.io/js/%40guarapi%2Feslint-config-guarapi.svg)](https://www.npmjs.com/package/@guarapi/eslint-config-guarapi)
 
 **eslint-config-guarapi** is an ESLint configuration package for projects that use the Guarapi framework. This setting recommends code style guidelines and practices to ensure code consistency and maintainability. It is designed for use in Node.js and browser-based applications.
