@@ -12,6 +12,7 @@
     "lint": "turbo run lint --filter={./packages/*}",
     "start": "turbo run start --filter={./packages/*}",
     "test": "turbo run test --filter={./packages/*}",
+    "test:coverage": "turbo run test --filter={./packages/*} -- --coverage",
     "version": "changeset version && pnpm install --no-frozen-lockfile",
     "publish": "changeset publish"
   },

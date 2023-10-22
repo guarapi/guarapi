@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "noEmit": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "outDir": "dist",
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,10 +1,13 @@
 {
+  "name": "basic-example",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "start": "npm run build && node dist/index.js",
     "clean": "rimraf dist",
     "dev": "nodemon",
-    "build": "npm run clean && swc src -d dist",
+    "build": "npm run clean && swc src -d dist && npm run types",
+    "types": "tsc --noEmit",
     "lint": "eslint ./src"
   },
   "dependencies": {
@@ -24,7 +27,7 @@
   },
   "prettier": "@guarapi/eslint-config-guarapi/prettierrc.js",
   "nodemonConfig": {
-    "ext": "*.ts",
-    "exec": "node -r @swc/register src/index.ts"
+    "ext": "*.{t,j}s",
+    "exec": "node -r @swc/register src/index"
   }
 }
