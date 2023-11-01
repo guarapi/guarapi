@@ -1,7 +1,7 @@
 import http, { Server } from 'node:http';
 import http2, { Http2Server } from 'node:http2';
 import guarapi, { createServer, middlewarePlugin } from '../src/index';
-import type { GuarapiConfig, ServerOptions } from '../src/types';
+import type { GuarapiConfig, Plugin, ServerOptions } from '../src/types';
 import { generateCertificates, request } from './utils';
 
 describe('Guarapi', () => {
@@ -84,7 +84,7 @@ describe('Guarapi', () => {
     const pluginOne = jest.fn();
 
     const pluginTwoPreHandler = jest.fn();
-    const pluginTwo = () => ({
+    const pluginTwo: Plugin = () => ({
       name: 'Plugin Two',
       pre: (req, res, next) => {
         pluginTwoPreHandler();
@@ -93,7 +93,7 @@ describe('Guarapi', () => {
     });
 
     const pluginThreePostHandler = jest.fn();
-    const pluginThree = () => ({
+    const pluginThree: Plugin = () => ({
       name: 'Plugin Three',
       post: (req, res, next) => {
         pluginThreePostHandler();

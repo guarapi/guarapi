@@ -1,5 +1,6 @@
 import request from 'supertest';
-import guarapi, { MiddlewareError, createServer, middlewarePlugin } from '../../src';
+import guarapi, { createServer, middlewarePlugin } from '../../src/index';
+import { MiddlewareError, Plugin } from '../../src/types';
 
 describe('Guarapi - plugins/middleware', () => {
   const buildApp = (plugins = [middlewarePlugin]) => {
@@ -157,7 +158,7 @@ describe('Guarapi - plugins/middleware', () => {
   it('should plugins pipeline not break if it has no final middleware', async () => {
     const { app, server } = buildApp();
     const pluginOneHandler = jest.fn();
-    const pluginOne = () => ({
+    const pluginOne: Plugin = () => ({
       name: 'plugin one',
       pre: (req, res) => {
         pluginOneHandler();
