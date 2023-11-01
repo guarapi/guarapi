@@ -1,11 +1,10 @@
-import http from 'node:http';
 import request from 'supertest';
-import guarapi, { loggerPlugin, middlewarePlugin } from '../../src';
+import guarapi, { createServer, loggerPlugin, middlewarePlugin } from '../../src';
 
 describe('Guarapi - plugins/logger', () => {
   const buildApp = () => {
     const app = guarapi();
-    const server = http.createServer(app);
+    const server = createServer({}, app);
 
     app.plugin(middlewarePlugin);
     app.plugin(loggerPlugin);

@@ -1,5 +1,5 @@
 import nextPipeline from '../../src/lib/next-pipeline';
-import { Request, Response } from '../../src/types';
+import { Middleware, Request, Response } from '../../src/types';
 
 describe('Guarapi - lib/next-pipeline', () => {
   beforeEach(() => {
@@ -11,7 +11,7 @@ describe('Guarapi - lib/next-pipeline', () => {
   it('should run pipeline', () => {
     const fnOne = jest.fn();
     const fnTwo = jest.fn();
-    const pipeline = [
+    const pipeline: Middleware[] = [
       (req, res, next) => {
         fnOne();
         next();
@@ -31,7 +31,7 @@ describe('Guarapi - lib/next-pipeline', () => {
   it('should run async pipeline', (done) => {
     const fnOne = jest.fn();
     const fnTwo = jest.fn();
-    const pipeline = [
+    const pipeline: Middleware[] = [
       async (req, res, next) => {
         fnOne();
         await new Promise((resolve) => setTimeout(resolve));
@@ -55,7 +55,7 @@ describe('Guarapi - lib/next-pipeline', () => {
   it('should run and break pipeline passing an error in next function', () => {
     const fnOne = jest.fn();
     const fnTwo = jest.fn();
-    const pipeline = [
+    const pipeline: Middleware[] = [
       (req, res, next) => {
         fnOne();
         next(new Error('Something goes wrong'));
@@ -77,7 +77,7 @@ describe('Guarapi - lib/next-pipeline', () => {
   it('should run and break pipeline throwing an error', () => {
     const fnOne = jest.fn();
     const fnTwo = jest.fn();
-    const pipeline = [
+    const pipeline: Middleware[] = [
       () => {
         fnOne();
         throw new Error('You should catch errors and pass in next function');
@@ -99,7 +99,7 @@ describe('Guarapi - lib/next-pipeline', () => {
   it('should run and break async pipeline throwing an error', () => {
     const fnOne = jest.fn();
     const fnTwo = jest.fn();
-    const pipeline = [
+    const pipeline: Middleware[] = [
       async (req, res, next) => {
         try {
           await Promise.reject(new Error('Something goes wrong'));

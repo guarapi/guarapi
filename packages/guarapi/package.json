@@ -24,7 +24,8 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "pnpm run clean && swc src -d dist && tsc --noEmit false --declaration --emitDeclarationOnly",
+    "build": "pnpm run clean && swc src -d dist && pnpm run types",
+    "types": "tsc --noEmit false --declaration --emitDeclarationOnly",
     "lint": "eslint ./src",
     "test": "jest"
   },
