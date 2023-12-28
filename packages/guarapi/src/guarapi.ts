@@ -45,6 +45,13 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
       return res;
     };
 
+    res.send = (str) => {
+      res.setHeader('content-type', 'text/plain; charset=utf-8');
+      res.end(str);
+
+      return res;
+    };
+
     return res;
   };
 

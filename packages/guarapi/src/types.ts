@@ -24,6 +24,7 @@ export interface Request extends IncomingMessage {
 export interface Response extends ServerResponse {
   status: (statusCode: number) => Response;
   json: (obj: unknown) => Response;
+  send: (str: string) => Response;
 }
 
 export interface Middleware {
@@ -41,6 +42,7 @@ export interface ServerOptions extends HTTPServerOptions, HTTP2SecureServerOptio
 export interface GuarapiConfig {
   logger?: GuarapiLogger;
   serverOptions?: ServerOptions;
+  maxPayloadSize?: number;
 }
 
 export interface PluginConfig {
