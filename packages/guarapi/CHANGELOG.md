@@ -1,5 +1,11 @@
 # guarapi
 
+## 1.1.0
+
+### Minor Changes
+
+- [#26](https://github.com/guarapi/guarapi/pull/26) [`dc06d90`](https://github.com/guarapi/guarapi/commit/dc06d903a486bd36969ef47d0de5cd4a6f2ee4fa) Thanks [@joaoneto](https://github.com/joaoneto)! - add application/x-www-form-urlencoded
+
 ## 1.0.2
 
 ### Patch Changes
