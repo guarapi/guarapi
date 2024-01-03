@@ -21,11 +21,11 @@ importers:
   examples/basic-api:
     dependencies:
       guarapi:
-        specifier: ^1.0.1
+        specifier: ^1.1.1
         version: link:../../packages/guarapi
     devDependencies:
       '@guarapi/eslint-config-guarapi':
-        specifier: ^0.1.1
+        specifier: ^0.1.2
         version: link:../../packages/eslint-config-guarapi
       '@swc/cli':
         specifier: ^0.1.62
@@ -58,7 +58,7 @@ importers:
   packages/create-guarapi-app:
     devDependencies:
       '@guarapi/eslint-config-guarapi':
-        specifier: ^0.1.1
+        specifier: ^0.1.2
         version: link:../eslint-config-guarapi
       '@swc/cli':
         specifier: ^0.1.62
@@ -139,7 +139,7 @@ importers:
   packages/guarapi:
     devDependencies:
       '@guarapi/eslint-config-guarapi':
-        specifier: ^0.1.1
+        specifier: ^0.1.2
         version: link:../eslint-config-guarapi
       '@swc/cli':
         specifier: ^0.1.62
