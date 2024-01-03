@@ -1,5 +1,3 @@
-import type { Server } from 'node:http';
-import type { Http2Server } from 'node:http2';
 import {
   Guarapi,
   GuarapiConfig,
@@ -12,6 +10,8 @@ import {
   Response,
 } from './types';
 import { nextPipeline, createServer } from './lib';
+import type { Server } from 'node:http';
+import type { Http2Server } from 'node:http2';
 
 function Guarapi(config?: GuarapiConfig): Guarapi {
   let server: Server | Http2Server | null = null;
