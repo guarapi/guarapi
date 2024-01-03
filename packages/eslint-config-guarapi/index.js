@@ -33,6 +33,19 @@ module.exports = {
 		'import/no-extraneous-dependencies': 0,
 		'import/prefer-default-export': 'off',
 		'import/extensions': ['error', 'ignorePackages', { js: 'never', ts: 'never' }],
+		"import/newline-after-import": ["error", { "count": 1 }],
+		"import/order": ["error", {
+			"groups": [
+				"external",
+				"builtin",
+				"internal",
+				"parent",
+				"sibling",
+				"index",
+				"object",
+				"type"
+			]
+		}],
 		'prettier/prettier': ['error', { 'parser': 'typescript' }],
 	},
 	overrides: [

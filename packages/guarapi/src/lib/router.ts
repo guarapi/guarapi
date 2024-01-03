@@ -1,5 +1,5 @@
-import nextPipeline from './next-pipeline';
 import { Middleware, Params, Request } from '../types';
+import nextPipeline from './next-pipeline';
 
 const BASE_URL = 'http://localhost/';
 

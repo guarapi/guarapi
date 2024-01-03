@@ -1,6 +1,6 @@
 import path from 'node:path';
-import pathExists from './path-exists';
 import { ParsedArgsValuesObj } from '../types';
+import pathExists from './path-exists';
 
 export default async function projectDirNotExists(values: ParsedArgsValuesObj) {
   const dest = path.resolve(process.cwd(), values.name);
