@@ -1,5 +1,15 @@
 # basic-example
 
+## 0.1.0
+
+### Minor Changes
+
+- [#30](https://github.com/guarapi/guarapi/pull/30) [`d4b9ac2`](https://github.com/guarapi/guarapi/commit/d4b9ac27b57d530dbdb4d15ec4bb35ca3218023b) Thanks [@joaoneto](https://github.com/joaoneto)! - add example run script
+  add turbo repo run script example config
+  fix basic-api package name
+  fix nodemon watch ext config
+  update docs
+
 ## 0.0.1
 
 ### Patch Changes
