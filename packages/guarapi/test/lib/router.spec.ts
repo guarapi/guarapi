@@ -107,6 +107,52 @@ describe('Guarapi - lib/router', () => {
     expect(routeHandlerHttp2).toBeCalledTimes(1);
   });
 
+  it('should dispatch a route with multiple handlers', async () => {
+    const http1 = buildApp();
+    const http2 = buildApp({ serverOptions: { isHTTP2: true } });
+    const routerHttp1 = Router();
+    const routerHttp2 = Router();
+    const routeHandlerOneHttp1 = jest.fn();
+    const routeHandlerTwoHttp1 = jest.fn();
+    const routeHandlerOneHttp2 = jest.fn();
+    const routeHandlerTwoHttp2 = jest.fn();
+
+    routerHttp1.get(
+      '/',
+      (req, res, next) => {
+        routeHandlerOneHttp1();
+        next();
+      },
+      (req, res) => {
+        routeHandlerTwoHttp1();
+        res.end('ok');
+      },
+    );
+
+    routerHttp2.get(
+      '/',
+      (req, res, next) => {
+        routeHandlerOneHttp2();
+        next();
+      },
+      (req, res) => {
+        routeHandlerTwoHttp2();
+        res.end('ok');
+      },
+    );
+
+    http1.app.use('/user', routerHttp1);
+    http2.app.use('/user', routerHttp2);
+
+    await request(http1.server).get('/user').expect(200);
+    await request(http2.server, { http2: true }).get('/user').expect(200);
+
+    expect(routeHandlerOneHttp1).toBeCalledTimes(1);
+    expect(routeHandlerTwoHttp1).toBeCalledTimes(1);
+    expect(routeHandlerOneHttp2).toBeCalledTimes(1);
+    expect(routeHandlerTwoHttp2).toBeCalledTimes(1);
+  });
+
   it('should dispatch a deep path route with middleware deep path', async () => {
     const http1 = buildApp();
     const http2 = buildApp({ serverOptions: { isHTTP2: true } });

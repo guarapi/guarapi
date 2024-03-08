@@ -16,7 +16,7 @@ export enum Methods {
 export type MethodsKeys = keyof typeof Methods;
 
 export type RouterAPI = {
-  [method in Methods]: (route: string, handler: Middleware) => void;
+  [method in Methods]: (route: string, ...handler: Middleware[]) => void;
 };
 
 export interface Router extends RouterAPI, Middleware {}
@@ -92,8 +92,11 @@ function routerBuilder() {
 
   (Object.keys(Methods) as MethodsKeys[]).forEach((method) => {
     Object.defineProperty(Router, method.toLocaleLowerCase(), {
-      value: (route: string, handler: Middleware) => {
+      value: (route: string, ...handlers: Middleware[]) => {
         const methodRoutes = routes.get(method);
+        const handler: Middleware = (req, res, next) => {
+          nextPipeline(handlers, req, res, null, next);
+        };
 
         if (!methodRoutes) {
           routes.set(method, [{ route, handler }]);
