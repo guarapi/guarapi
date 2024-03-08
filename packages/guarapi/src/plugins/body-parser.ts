@@ -43,12 +43,10 @@ const MAX_PAYLOAD_SIZE_BYTES = 2097152;
 const bodyParserPlugin: Plugin = (_app, config) => {
   const { maxPayloadSize = MAX_PAYLOAD_SIZE_BYTES } = config || {};
   return {
-    name: 'formUrlencodedParser',
+    name: 'bodyParser',
     pre: async (req, res, next) => {
       const contentType = req.headers['content-type'];
-      const contentLength = req.headers['content-length']
-        ? parseInt(req.headers['content-length'], 10)
-        : 0;
+      const contentLength = parseInt(req.headers['content-length']!, 10);
 
       if (contentLength > maxPayloadSize) {
         next(new Error(`Max payload ${maxPayloadSize}`));
