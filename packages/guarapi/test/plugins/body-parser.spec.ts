@@ -1,5 +1,6 @@
 import request from 'supertest';
 import guarapi, {
+  GuarapiConfig,
   MiddlewareError,
   bodyParserPlugin,
   createServer,
@@ -7,8 +8,8 @@ import guarapi, {
 } from '../../src';
 
 describe('Guarapi - plugins/body-parser', () => {
-  const buildApp = () => {
-    const app = guarapi({ maxPayloadSize: 1000 });
+  const buildApp = (config?: GuarapiConfig) => {
+    const app = guarapi(config);
     const server = createServer({}, app);
 
     app.plugin(bodyParserPlugin);
@@ -111,6 +112,58 @@ describe('Guarapi - plugins/body-parser', () => {
     });
   });
 
+  it('should parse x-www-form-urlencoded with valid array data', async () => {
+    const { app, server } = buildApp();
+    const body = jest.fn();
+    const maliciousPayload = 'item=1&item&&item=2';
+
+    app.use((req, res) => {
+      body(req.body);
+      res.end();
+    });
+
+    await request(server)
+      .post('/')
+      .set('Content-type', 'application/x-www-form-urlencoded')
+      .send(maliciousPayload)
+      .expect(200);
+
+    expect(body).toBeCalledWith({ item: ['1', '', '2'] });
+  });
+
+  it('should parse x-www-form-urlencoded with valid deep object data', async () => {
+    const { app, server } = buildApp();
+    const body = jest.fn();
+    const maliciousPayload =
+      'deep.obj.a=1&deep.obj[b]=2&deep.obj.c.1.2=10&deep.obj.c.1.2=20&deep.obj[]=1000';
+
+    app.use((req, res) => {
+      body(req.body);
+      res.end();
+    });
+
+    await request(server)
+      .post('/')
+      .set('Content-type', 'application/x-www-form-urlencoded')
+      .send(maliciousPayload)
+      .expect(200);
+
+    expect(body).toBeCalledWith({
+      deep: {
+        obj: {
+          a: '1',
+          b: '2',
+          c: {
+            1: {
+              2: ['10', '20'],
+            },
+          },
+          3: '1000',
+        },
+      },
+    });
+  });
+
   it('should handle x-www-form-urlencoded with invalid UTF-8 characters', async () => {
     const { app, server } = buildApp();
     const body = jest.fn();
@@ -157,7 +210,7 @@ describe('Guarapi - plugins/body-parser', () => {
   });
 
   it('should handle x-www-form-urlencoded with payload overflow', async () => {
-    const { app, server } = buildApp();
+    const { app, server } = buildApp({ maxPayloadSize: 1000 });
     const bodyHandler = jest.fn();
     const errorHandler = jest.fn();
 
@@ -183,5 +236,34 @@ describe('Guarapi - plugins/body-parser', () => {
     expect(bodyHandler).not.toBeCalled();
     expect(errorHandler).toBeCalled();
     expect(response.text).toBe('Payload too large');
+  });
+
+  it('should handle x-www-form-urlencoded with empty payload', async () => {
+    const { app, server } = buildApp();
+    const bodyHandler = jest.fn();
+    const errorHandler = jest.fn();
+
+    const noPayload = '';
+    const expectedEmptyParsedPayload = {};
+
+    app.use((req, res) => {
+      bodyHandler(req.body);
+      res.end();
+    });
+
+    app.use<MiddlewareError>((error, req, res, _next) => {
+      errorHandler();
+      res.status(400);
+      res.end();
+    });
+
+    await request(server)
+      .post('/')
+      .set('Content-type', 'application/x-www-form-urlencoded')
+      .send(noPayload)
+      .expect(200);
+
+    expect(bodyHandler).toBeCalledWith(expectedEmptyParsedPayload);
+    expect(errorHandler).not.toBeCalled();
   });
 });
