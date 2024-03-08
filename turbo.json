@@ -30,6 +30,10 @@
     },
     "start": {
       "cache": false
+    },
+    "example": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

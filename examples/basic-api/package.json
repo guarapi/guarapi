@@ -1,5 +1,5 @@
 {
-  "name": "basic-example",
+  "name": "basic-api",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -27,7 +27,7 @@
   },
   "prettier": "@guarapi/eslint-config-guarapi/prettierrc.js",
   "nodemonConfig": {
-    "ext": "*.{t,j}s",
+    "ext": "ts,js",
     "exec": "node -r @swc/register src/index"
   }
 }
