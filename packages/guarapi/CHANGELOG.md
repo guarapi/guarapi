@@ -1,5 +1,11 @@
 # guarapi
 
+## 1.2.0
+
+### Minor Changes
+
+- [#32](https://github.com/guarapi/guarapi/pull/32) [`66d46f0`](https://github.com/guarapi/guarapi/commit/66d46f0041f57737ffb15059fc427d14ae36974e) Thanks [@joaoneto](https://github.com/joaoneto)! - add multiple handler Router capability
+
 ## 1.1.2
 
 ### Patch Changes
