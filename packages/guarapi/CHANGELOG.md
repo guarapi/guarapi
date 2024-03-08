@@ -1,5 +1,13 @@
 # guarapi
 
+## 1.1.2
+
+### Patch Changes
+
+- [#31](https://github.com/guarapi/guarapi/pull/31) [`7c3a80a`](https://github.com/guarapi/guarapi/commit/7c3a80aaccfc86c8c74411723ff56d06e39386ca) Thanks [@joaoneto](https://github.com/joaoneto)! - improve tests coverage
+  change bodyparser plugin content-length handler
+  rename plugin to correct name bodyParser
+
 ## 1.1.1
 
 ### Patch Changes
