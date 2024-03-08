@@ -7,6 +7,7 @@
     "packages/*"
   ],
   "scripts": {
+    "example": "turbo run dev",
     "build": "turbo run build --filter={./packages/*}",
     "clean": "turbo run clean --filter={./packages/*}",
     "lint": "turbo run lint --filter={./packages/*}",

@@ -1,3 +1,4 @@
+```markdown
 # Guarapi
 
 ![CI](https://github.com/guarapi/guarapi/actions/workflows/ci.yml/badge.svg?branch=main)
@@ -56,6 +57,17 @@ For example, to create a Guarapi app with a custom name and example, you can run
 ```shell
 pnpm create @guarapi/guarapi-app --name my-custom-project --example my-custom-example
 ```
+
+## Running Examples
+To run examples located in the `./examples` directory, you can use the following command format:
+
+### Using pnpm:
+
+```shell
+pnpm example --filter=basic-api
+```
+
+This command will execute the example named `basic-api`. You can replace `basic-api` with the name of the specific example you want to run.
 
 Feel free to explore the Guarapi documentation for more details on effectively and efficiently utilizing the framework in your projects. If you have any questions or require further assistance, don't hesitate to reach out to our vibrant and supportive community.
 
