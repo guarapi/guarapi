@@ -1,4 +1,3 @@
-```markdown
 # Guarapi
 
 ![CI](https://github.com/guarapi/guarapi/actions/workflows/ci.yml/badge.svg?branch=main)
