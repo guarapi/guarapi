@@ -1,6 +1,6 @@
 {
   "name": "guarapi",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Minimalist, fast, and scalable Node.js web http app framework",
   "keywords": [
     "guarapi",
@@ -30,7 +30,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@guarapi/eslint-config-guarapi": "^0.1.2",
+    "@guarapi/eslint-config-guarapi": "^0.1.3",
     "@swc/cli": "^0.1.65",
     "@swc/core": "^1.5.29",
     "@swc/jest": "^0.2.36",

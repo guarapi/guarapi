@@ -1,5 +1,11 @@
 # @guarapi/create-guarapi-app
 
+## 1.0.2
+
+### Patch Changes
+
+- [#36](https://github.com/guarapi/guarapi/pull/36) [`c142c9db16532bbbf6298150e081008564f5c7c4`](https://github.com/guarapi/guarapi/commit/c142c9db16532bbbf6298150e081008564f5c7c4) Thanks [@joaoneto](https://github.com/joaoneto)! - add multiple handlers support and upgrade packages
+
 ## 1.0.1
 
 ### Patch Changes

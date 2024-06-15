@@ -21,48 +21,11 @@ importers:
   examples/basic-api:
     dependencies:
       guarapi:
-        specifier: ^1.2.0
+        specifier: ^1.3.0
         version: link:../../packages/guarapi
     devDependencies:
       '@guarapi/eslint-config-guarapi':
-        specifier: ^0.1.2
-        version: link:../../packages/eslint-config-guarapi
-      '@swc/cli':
-        specifier: ^0.1.65
-        version: 0.1.65(@swc/core@1.5.29)
-      '@swc/core':
-        specifier: ^1.5.29
-        version: 1.5.29
-      '@swc/register':
-        specifier: ^0.1.10
-        version: 0.1.10(@swc/core@1.5.29)
-      '@types/node':
-        specifier: ^20.14.2
-        version: 20.14.2
-      eslint:
-        specifier: ^8.57.0
-        version: 8.57.0
-      nodemon:
-        specifier: ^3.1.3
-        version: 3.1.3
-      prettier:
-        specifier: ^3.3.2
-        version: 3.3.2
-      rimraf:
-        specifier: ^5.0.7
-        version: 5.0.7
-      typescript:
-        specifier: ^5.4.5
-        version: 5.4.5
-
-  examples/blog-api:
-    dependencies:
-      guarapi:
-        specifier: ^1.2.0
-        version: link:../../packages/guarapi
-    devDependencies:
-      '@guarapi/eslint-config-guarapi':
-        specifier: ^0.1.2
+        specifier: ^0.1.3
         version: link:../../packages/eslint-config-guarapi
       '@swc/cli':
         specifier: ^0.1.65
@@ -95,7 +58,7 @@ importers:
   packages/create-guarapi-app:
     devDependencies:
       '@guarapi/eslint-config-guarapi':
-        specifier: ^0.1.2
+        specifier: ^0.1.3
         version: link:../eslint-config-guarapi
       '@swc/cli':
         specifier: ^0.1.65
@@ -176,7 +139,7 @@ importers:
   packages/guarapi:
     devDependencies:
       '@guarapi/eslint-config-guarapi':
-        specifier: ^0.1.2
+        specifier: ^0.1.3
         version: link:../eslint-config-guarapi
       '@swc/cli':
         specifier: ^0.1.65
