@@ -41,7 +41,7 @@ describe('Guarapi - plugins/body-parser', () => {
       .send(payload)
       .expect(200);
 
-    expect(body).toBeCalledWith(payload);
+    expect(body).toHaveBeenCalledWith(payload);
   });
 
   it('should not parse wrong content-type', async () => {
@@ -60,7 +60,7 @@ describe('Guarapi - plugins/body-parser', () => {
       .send(payload)
       .expect(200);
 
-    expect(body).toBeCalledWith(undefined);
+    expect(body).toHaveBeenCalledWith(undefined);
   });
 
   it('should not parse wrong content-type', async () => {
@@ -105,7 +105,7 @@ describe('Guarapi - plugins/body-parser', () => {
       .send(maliciousPayload)
       .expect(200);
 
-    expect(body).toBeCalledWith({
+    expect(body).toHaveBeenCalledWith({
       age: '30',
       comment: "<script>alert('XSS!')</script>",
       name: 'John',
@@ -128,7 +128,7 @@ describe('Guarapi - plugins/body-parser', () => {
       .send(maliciousPayload)
       .expect(200);
 
-    expect(body).toBeCalledWith({ item: ['1', '', '2'] });
+    expect(body).toHaveBeenCalledWith({ item: ['1', '', '2'] });
   });
 
   it('should parse x-www-form-urlencoded with valid deep object data', async () => {
@@ -148,7 +148,7 @@ describe('Guarapi - plugins/body-parser', () => {
       .send(maliciousPayload)
       .expect(200);
 
-    expect(body).toBeCalledWith({
+    expect(body).toHaveBeenCalledWith({
       deep: {
         obj: {
           a: '1',
@@ -180,7 +180,7 @@ describe('Guarapi - plugins/body-parser', () => {
       .send(invalidPayload)
       .expect(200);
 
-    expect(body).toBeCalledWith({ age: '30', comment: '𐀀', name: 'John' });
+    expect(body).toHaveBeenCalledWith({ age: '30', comment: '𐀀', name: 'John' });
   });
 
   it('should handle malformed x-www-form-urlencoded data', async () => {
@@ -205,7 +205,7 @@ describe('Guarapi - plugins/body-parser', () => {
       .send(malformedPayload)
       .expect(200);
 
-    expect(bodyHandler).toBeCalledWith({ name: 'Guarapi} {malformed=true' });
+    expect(bodyHandler).toHaveBeenCalledWith({ name: 'Guarapi} {malformed=true' });
     expect(errorHandler).not.toBeCalled();
   });
 
@@ -263,7 +263,7 @@ describe('Guarapi - plugins/body-parser', () => {
       .send(noPayload)
       .expect(200);
 
-    expect(bodyHandler).toBeCalledWith(expectedEmptyParsedPayload);
+    expect(bodyHandler).toHaveBeenCalledWith(expectedEmptyParsedPayload);
     expect(errorHandler).not.toBeCalled();
   });
 });

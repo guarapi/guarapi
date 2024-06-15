@@ -47,8 +47,8 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/').expect(200);
     await request(http2.server, { http2: true }).get('/').expect(200);
 
-    expect(routeHandlerHttp1).toBeCalledTimes(1);
-    expect(routeHandlerHttp2).toBeCalledTimes(1);
+    expect(routeHandlerHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerHttp2).toHaveBeenCalledTimes(1);
   });
 
   it('should dispatch a deep path route', async () => {
@@ -75,8 +75,8 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/deep/path/route').expect(200);
     await request(http2.server, { http2: true }).get('/deep/path/route').expect(200);
 
-    expect(routeHandlerHttp1).toBeCalledTimes(1);
-    expect(routeHandlerHttp2).toBeCalledTimes(1);
+    expect(routeHandlerHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerHttp2).toHaveBeenCalledTimes(1);
   });
 
   it('should dispatch a route with middleware path', async () => {
@@ -103,8 +103,8 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/user').expect(200);
     await request(http2.server, { http2: true }).get('/user').expect(200);
 
-    expect(routeHandlerHttp1).toBeCalledTimes(1);
-    expect(routeHandlerHttp2).toBeCalledTimes(1);
+    expect(routeHandlerHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerHttp2).toHaveBeenCalledTimes(1);
   });
 
   it('should dispatch a route with multiple handlers', async () => {
@@ -147,10 +147,10 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/user').expect(200);
     await request(http2.server, { http2: true }).get('/user').expect(200);
 
-    expect(routeHandlerOneHttp1).toBeCalledTimes(1);
-    expect(routeHandlerTwoHttp1).toBeCalledTimes(1);
-    expect(routeHandlerOneHttp2).toBeCalledTimes(1);
-    expect(routeHandlerTwoHttp2).toBeCalledTimes(1);
+    expect(routeHandlerOneHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerTwoHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerOneHttp2).toHaveBeenCalledTimes(1);
+    expect(routeHandlerTwoHttp2).toHaveBeenCalledTimes(1);
   });
 
   it('should dispatch a deep path route with middleware deep path', async () => {
@@ -179,8 +179,8 @@ describe('Guarapi - lib/router', () => {
       .get('/middleware/deep/path/route/deep/path')
       .expect(200);
 
-    expect(routeHandlerHttp1).toBeCalledTimes(1);
-    expect(routeHandlerHttp2).toBeCalledTimes(1);
+    expect(routeHandlerHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerHttp2).toHaveBeenCalledTimes(1);
   });
 
   it('should not dispatch a route with middleware path', async () => {
@@ -255,10 +255,10 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/').expect(200);
     await request(http2.server, { http2: true }).get('/').expect(200);
 
-    expect(routeHandlerOneHttp1).toBeCalledTimes(1);
-    expect(routeHandlerTwoHttp1).toBeCalledTimes(1);
-    expect(routeHandlerOneHttp2).toBeCalledTimes(1);
-    expect(routeHandlerTwoHttp2).toBeCalledTimes(1);
+    expect(routeHandlerOneHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerTwoHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerOneHttp2).toHaveBeenCalledTimes(1);
+    expect(routeHandlerTwoHttp2).toHaveBeenCalledTimes(1);
   });
 
   it('should run async routes in pipeline', async () => {
@@ -301,10 +301,10 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/').expect(200);
     await request(http2.server, { http2: true }).get('/').expect(200);
 
-    expect(routeHandlerOneHttp1).toBeCalledTimes(1);
-    expect(routeHandlerTwoHttp1).toBeCalledTimes(1);
-    expect(routeHandlerOneHttp2).toBeCalledTimes(1);
-    expect(routeHandlerTwoHttp2).toBeCalledTimes(1);
+    expect(routeHandlerOneHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerTwoHttp1).toHaveBeenCalledTimes(1);
+    expect(routeHandlerOneHttp2).toHaveBeenCalledTimes(1);
+    expect(routeHandlerTwoHttp2).toHaveBeenCalledTimes(1);
   });
 
   it('should route pass error in next function', async () => {
@@ -341,9 +341,9 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/').expect(500);
     await request(http2.server, { http2: true }).get('/').expect(500);
 
-    expect(routeHandlerOneHttp1).toBeCalledTimes(1);
+    expect(routeHandlerOneHttp1).toHaveBeenCalledTimes(1);
     expect(routeHandlerTwoHttp1).not.toBeCalled();
-    expect(routeHandlerOneHttp2).toBeCalledTimes(1);
+    expect(routeHandlerOneHttp2).toHaveBeenCalledTimes(1);
     expect(routeHandlerTwoHttp2).not.toBeCalled();
   });
 
@@ -383,10 +383,10 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/').expect(200);
     await request(http2.server, { http2: true }).get('/').expect(200);
 
-    expect(console.error).toBeCalledWith('Unhandled sync rejection detected');
-    expect(routeHandlerOneHttp1).toBeCalledTimes(1);
+    expect(console.error).not.toHaveBeenCalledWith('Unhandled sync rejection detected');
+    expect(routeHandlerOneHttp1).toHaveBeenCalledTimes(1);
     expect(routeHandlerTwoHttp1).not.toBeCalled();
-    expect(routeHandlerOneHttp2).toBeCalledTimes(1);
+    expect(routeHandlerOneHttp2).toHaveBeenCalledTimes(1);
     expect(routeHandlerTwoHttp2).not.toBeCalled();
   });
 
@@ -407,8 +407,8 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/user/user-id-1').expect(200);
     await request(http2.server, { http2: true }).get('/user/user-id-1').expect(200);
 
-    expect(routeParams).toBeCalledTimes(2);
-    expect(routeParams).toBeCalledWith({ user_id: 'user-id-1' });
+    expect(routeParams).toHaveBeenCalledTimes(2);
+    expect(routeParams).toHaveBeenCalledWith({ user_id: 'user-id-1' });
   });
 
   it('should route with wildcard params', async () => {
@@ -428,8 +428,8 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/deep/path/name').expect(200);
     await request(http2.server, { http2: true }).get('/deep/path/name').expect(200);
 
-    expect(routeParams).toBeCalledTimes(2);
-    expect(routeParams).toBeCalledWith({ path: ['deep', 'path', 'name'] });
+    expect(routeParams).toHaveBeenCalledTimes(2);
+    expect(routeParams).toHaveBeenCalledWith({ path: ['deep', 'path', 'name'] });
   });
 
   it('should route with queryString', async () => {
@@ -449,8 +449,8 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/?my-query-string').expect(200);
     await request(http2.server, { http2: true }).get('/?my-query-string').expect(200);
 
-    expect(routeQueryString).toBeCalledTimes(2);
-    expect(routeQueryString).toBeCalledWith(new URLSearchParams({ 'my-query-string': '' }));
+    expect(routeQueryString).toHaveBeenCalledTimes(2);
+    expect(routeQueryString).toHaveBeenCalledWith(new URLSearchParams({ 'my-query-string': '' }));
   });
 
   it('should route with params and queryString', async () => {
@@ -472,10 +472,10 @@ describe('Guarapi - lib/router', () => {
     await request(http1.server).get('/user/user-id-1?my-query-string').expect(200);
     await request(http2.server, { http2: true }).get('/user/user-id-1?my-query-string').expect(200);
 
-    expect(routeParams).toBeCalledTimes(2);
-    expect(routeQueryString).toBeCalledTimes(2);
-    expect(routeParams).toBeCalledWith({ user_id: 'user-id-1' });
-    expect(routeQueryString).toBeCalledWith(new URLSearchParams({ 'my-query-string': '' }));
+    expect(routeParams).toHaveBeenCalledTimes(2);
+    expect(routeQueryString).toHaveBeenCalledTimes(2);
+    expect(routeParams).toHaveBeenCalledWith({ user_id: 'user-id-1' });
+    expect(routeQueryString).toHaveBeenCalledWith(new URLSearchParams({ 'my-query-string': '' }));
   });
 
   it('should not match route', async () => {
@@ -547,7 +547,7 @@ describe('Guarapi - lib/router', () => {
     await request(http2.server, { http2: true }).delete('/not/match/route').expect(404);
 
     expect(routeOne).not.toBeCalled();
-    expect(catchError).toBeCalledTimes(2);
-    expect(catchError).toBeCalledWith('Not Found');
+    expect(catchError).toHaveBeenCalledTimes(2);
+    expect(catchError).toHaveBeenCalledWith('Not Found');
   });
 });

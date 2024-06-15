@@ -29,7 +29,7 @@ describe('Guarapi - lib/create-server', () => {
 
     await request(server).get('/');
 
-    expect(httpVersion).toBeCalledWith('1.1');
+    expect(httpVersion).toHaveBeenCalledWith('1.1');
   });
 
   it('should create http2 server', async () => {
@@ -42,7 +42,7 @@ describe('Guarapi - lib/create-server', () => {
 
     await request(server, { http2: true }).get('/');
 
-    expect(httpVersion).toBeCalledWith('2.0');
+    expect(httpVersion).toHaveBeenCalledWith('2.0');
   });
 
   it('should create ssl http1 server', async () => {
@@ -60,7 +60,7 @@ describe('Guarapi - lib/create-server', () => {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     await request(server).get('/').set('Host', 'localhost');
 
-    expect(httpVersion).toBeCalledWith('1.1');
+    expect(httpVersion).toHaveBeenCalledWith('1.1');
   });
 
   it('should create ssl http2 server', async () => {
@@ -79,6 +79,6 @@ describe('Guarapi - lib/create-server', () => {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     await request(server, { http2: true }).get('/').set('Host', 'localhost');
 
-    expect(httpVersion).toBeCalledWith('2.0');
+    expect(httpVersion).toHaveBeenCalledWith('2.0');
   });
 });

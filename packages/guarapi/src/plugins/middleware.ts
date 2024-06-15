@@ -1,5 +1,5 @@
 import { Middleware, MiddlewareError, Plugin, Request } from '../types';
-import nextMiddleware from '../lib/next-pipeline';
+import nextPipeline from '../lib/next-pipeline';
 
 declare module '../types' {
   interface Guarapi {
@@ -57,10 +57,14 @@ const middlewarePlugin: Plugin = (app) => {
   return {
     name: 'middleware',
     pre: (req, res, next) => {
-      nextMiddleware(matchMiddlewares(req.url!), req, res, null, next);
+      try {
+        nextPipeline(matchMiddlewares(req.url!), req, res, null, next);
+      } catch (error) {
+        next(error);
+      }
     },
     error: (error, req, res) => {
-      nextMiddleware(errorMiddlewares, req, res, error, () => {
+      nextPipeline(errorMiddlewares, req, res, error, () => {
         res.end(JSON.stringify({ error }));
       });
     },

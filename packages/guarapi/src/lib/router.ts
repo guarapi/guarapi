@@ -84,10 +84,14 @@ function routerBuilder() {
     const relativeUrl = req.url!.replace(req.middlewarePath!.replace(/\/?$/, '') || '/', '');
     const handlers = matchRoutes(req.method as MethodsKeys, relativeUrl);
 
-    nextPipeline(handlers, req, res, null, (error) => {
-      res.statusCode = error ? 500 : 404;
-      next(error || new Error('Not Found'));
-    });
+    try {
+      nextPipeline(handlers, req, res, null, (error) => {
+        res.statusCode = error ? 500 : 404;
+        next(error || new Error('Not Found'));
+      });
+    } catch (error) {
+      next(error);
+    }
   } as Router;
 
   (Object.keys(Methods) as MethodsKeys[]).forEach((method) => {

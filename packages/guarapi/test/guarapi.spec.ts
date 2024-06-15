@@ -1,8 +1,8 @@
 import http, { Server } from 'node:http';
 import http2, { Http2Server } from 'node:http2';
-import guarapi, { createServer, middlewarePlugin } from '../src/index';
-import type { GuarapiConfig, Plugin, ServerOptions } from '../src/types';
+import guarapi, { createServer, middlewarePlugin, nextPipeline } from '../src/index';
 import { generateCertificates, request } from './utils';
+import type { GuarapiConfig, Plugin, ServerOptions } from '../src/types';
 
 describe('Guarapi', () => {
   const env = process.env;
@@ -111,9 +111,9 @@ describe('Guarapi', () => {
     });
     await request(server).get('/');
 
-    expect(pluginThreePostHandler).toBeCalledTimes(1);
-    expect(pluginTwoPreHandler).toBeCalledTimes(1);
-    expect(pluginOne).toBeCalledTimes(1);
+    expect(pluginThreePostHandler).toHaveBeenCalledTimes(1);
+    expect(pluginTwoPreHandler).toHaveBeenCalledTimes(1);
+    expect(pluginOne).toHaveBeenCalledTimes(1);
   });
 
   it('should app throw err trying to use plugins not applyed', () => {
@@ -139,7 +139,7 @@ describe('Guarapi', () => {
 
     await request(server).get('/').set('Host', 'localhost');
 
-    expect(httpVersion).toBeCalledWith('1.1');
+    expect(httpVersion).toHaveBeenCalledWith('1.1');
   });
 
   it('should app works with http2 ssl server', async () => {
@@ -158,7 +158,7 @@ describe('Guarapi', () => {
 
     await request(server, { http2: true }).get('/').set('Host', 'localhost');
 
-    expect(httpVersion).toBeCalledWith('2.0');
+    expect(httpVersion).toHaveBeenCalledWith('2.0');
   });
 
   it('should respond with json', async () => {
@@ -185,5 +185,45 @@ describe('Guarapi', () => {
     });
 
     await request(server).get('/').expect(401, 'Unauthorized');
+  });
+
+  it('should handle plugin rejection', async () => {
+    const app = guarapi();
+    const server = createServer({}, app);
+
+    app.plugin(() => {
+      return {
+        name: 'unhandledSyncThrow',
+        pre: (_req, _res, _next) => {
+          throw new Error('Oh no');
+        },
+        error: (error, req, res) => {
+          nextPipeline([], req, res, error, (err) => {
+            res.status(500).end((err as Error).message);
+          });
+        },
+      };
+    });
+
+    await request(server).get('/').expect(500, 'Oh no');
+  });
+
+  it('should handle final rejection', async () => {
+    const app = guarapi();
+    const server = createServer({}, app);
+
+    app.plugin(() => {
+      return {
+        name: 'unhandledSyncThrow',
+        pre: (_req, _res, _next) => {
+          throw new Error('Oh no');
+        },
+        error: (error, req, res, next) => {
+          nextPipeline([], req, res, error, next);
+        },
+      };
+    });
+
+    await request(server).get('/').expect(500, 'Internal Server Error');
   });
 });

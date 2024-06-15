@@ -24,8 +24,8 @@ describe('Guarapi - lib/next-pipeline', () => {
 
     nextPipeline(pipeline, {} as Request, {} as Response);
 
-    expect(fnOne).toBeCalledTimes(1);
-    expect(fnTwo).toBeCalledTimes(1);
+    expect(fnOne).toHaveBeenCalledTimes(1);
+    expect(fnTwo).toHaveBeenCalledTimes(1);
   });
 
   it('should run async pipeline', (done) => {
@@ -43,8 +43,8 @@ describe('Guarapi - lib/next-pipeline', () => {
         next();
       },
       async () => {
-        expect(fnOne).toBeCalledTimes(1);
-        expect(fnTwo).toBeCalledTimes(1);
+        expect(fnOne).toHaveBeenCalledTimes(1);
+        expect(fnTwo).toHaveBeenCalledTimes(1);
         done();
       },
     ];
@@ -69,7 +69,7 @@ describe('Guarapi - lib/next-pipeline', () => {
     nextPipeline(pipeline, {} as Request, {} as Response, null, (err) => {
       expect(err).toBeInstanceOf(Error);
       expect((err as Error).message).toEqual('Something goes wrong');
-      expect(fnOne).toBeCalledTimes(1);
+      expect(fnOne).toHaveBeenCalledTimes(1);
       expect(fnTwo).not.toBeCalled();
     });
   });
@@ -90,7 +90,7 @@ describe('Guarapi - lib/next-pipeline', () => {
 
     expect(() => {
       nextPipeline(pipeline, {} as Request, {} as Response, null, () => {
-        expect(fnOne).toBeCalledTimes(1);
+        expect(fnOne).toHaveBeenCalledTimes(1);
         expect(fnTwo).not.toBeCalled();
       });
     }).toThrow('You should catch errors and pass in next function');
