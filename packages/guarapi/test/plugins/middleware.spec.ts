@@ -41,8 +41,8 @@ describe('Guarapi - plugins/middleware', () => {
 
     await request(server).get('/');
 
-    expect(middlewareOne).toBeCalledTimes(1);
-    expect(middlewareTwo).toBeCalledTimes(1);
+    expect(middlewareOne).toHaveBeenCalledTimes(1);
+    expect(middlewareTwo).toHaveBeenCalledTimes(1);
   });
 
   it('should run pipeline with async middlewares', async () => {
@@ -67,8 +67,8 @@ describe('Guarapi - plugins/middleware', () => {
 
     await request(server).get('/');
 
-    expect(middlewareOne).toBeCalledTimes(1);
-    expect(middlewareTwo).toBeCalledTimes(1);
+    expect(middlewareOne).toHaveBeenCalledTimes(1);
+    expect(middlewareTwo).toHaveBeenCalledTimes(1);
   });
 
   it('should run pipeline with throw error handle', async () => {
@@ -86,7 +86,7 @@ describe('Guarapi - plugins/middleware', () => {
     });
 
     app.use(() => {
-      throw new Error('You should catch errors and pass in next function');
+      throw new Error('My error message');
     });
 
     app.use((req, res, next) => {
@@ -106,14 +106,12 @@ describe('Guarapi - plugins/middleware', () => {
 
     await request(server).get('/');
 
-    expect(console.error).toBeCalledWith('Unhandled sync rejection detected');
-    expect(middlewareOne).toBeCalledTimes(1);
-    expect(middlewareTwo).not.toBeCalled();
-    expect(middlewareThree).not.toBeCalled();
-    expect(middlewareFour).toBeCalledTimes(1);
-    expect(middlewareFour).toBeCalledWith(
-      new Error('You should catch errors and pass in next function'),
-    );
+    expect(console.error).not.toHaveBeenCalledWith('Unhandled sync rejection detected');
+    expect(middlewareOne).toHaveBeenCalledTimes(1);
+    expect(middlewareTwo).not.toHaveBeenCalled();
+    expect(middlewareThree).not.toHaveBeenCalled();
+    expect(middlewareFour).toHaveBeenCalledTimes(1);
+    expect(middlewareFour).toHaveBeenCalledWith(new Error('My error message'));
   });
 
   it('should run pipeline with next param error handle', async () => {
@@ -149,10 +147,10 @@ describe('Guarapi - plugins/middleware', () => {
 
     await request(server).get('/');
 
-    expect(middlewareOne).toBeCalledTimes(1);
-    expect(middlewareTwo).not.toBeCalledTimes(1);
-    expect(middlewareThree).not.toBeCalledTimes(1);
-    expect(middlewareFour).toBeCalledTimes(1);
+    expect(middlewareOne).toHaveBeenCalledTimes(1);
+    expect(middlewareTwo).not.toHaveBeenCalledTimes(1);
+    expect(middlewareThree).not.toHaveBeenCalledTimes(1);
+    expect(middlewareFour).toHaveBeenCalledTimes(1);
   });
 
   it('should plugins pipeline not break if it has no final middleware', async () => {
@@ -174,7 +172,7 @@ describe('Guarapi - plugins/middleware', () => {
 
     await request(server).get('/');
 
-    expect(pluginOneHandler).toBeCalledTimes(1);
+    expect(pluginOneHandler).toHaveBeenCalledTimes(1);
   });
 
   it('should pipeline not break without req.url', async () => {
@@ -198,7 +196,7 @@ describe('Guarapi - plugins/middleware', () => {
 
     await request(server).get('/').expect(200);
 
-    expect(pluginOneHandler).toBeCalledTimes(1);
-    expect(pluginOneHandler).toBeCalledWith(undefined);
+    expect(pluginOneHandler).toHaveBeenCalledTimes(1);
+    expect(pluginOneHandler).toHaveBeenCalledWith(undefined);
   });
 });

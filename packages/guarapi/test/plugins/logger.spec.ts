@@ -32,7 +32,7 @@ describe('Guarapi - plugins/logger', () => {
     });
     await request(server).get('/');
 
-    expect(process.stdout.write).toBeCalledWith(expectedText);
+    expect(process.stdout.write).toHaveBeenCalledWith(expectedText);
   });
 
   it('should log error request', async () => {
@@ -51,8 +51,8 @@ describe('Guarapi - plugins/logger', () => {
 
     await request(server).get('/');
 
-    expect(process.stderr.write).toBeCalledWith(expectedErrorText);
-    expect(process.stdout.write).toBeCalledWith(expectedRequestLogText);
+    expect(process.stderr.write).toHaveBeenCalledWith(expectedErrorText);
+    expect(process.stdout.write).toHaveBeenCalledWith(expectedRequestLogText);
   });
 
   it('should log debug text', async () => {
@@ -73,6 +73,6 @@ describe('Guarapi - plugins/logger', () => {
 
     expect(process.stdout.write).toHaveBeenNthCalledWith(1, expectedTextOne);
     expect(process.stdout.write).toHaveBeenNthCalledWith(2, expectedTextTwo);
-    expect(process.stdout.write).toBeCalledTimes(2);
+    expect(process.stdout.write).toHaveBeenCalledTimes(2);
   });
 });

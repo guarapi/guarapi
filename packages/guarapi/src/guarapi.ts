@@ -63,8 +63,9 @@ function Guarapi(config?: GuarapiConfig): Guarapi {
         }
       });
     } catch (err) {
-      console.error('Unhandled sync rejection detected');
-      nextPipeline(pluginsError, req, res, err);
+      nextPipeline(pluginsError, req, res, err, () => {
+        res.status(500).end('Internal Server Error');
+      });
     }
   };
 
