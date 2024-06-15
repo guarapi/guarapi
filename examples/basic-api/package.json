@@ -1,6 +1,6 @@
 {
   "name": "basic-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "start": "npm run build && node dist/index.js",
@@ -11,10 +11,10 @@
     "lint": "eslint ./src"
   },
   "dependencies": {
-    "guarapi": "^1.2.0"
+    "guarapi": "^1.3.0"
   },
   "devDependencies": {
-    "@guarapi/eslint-config-guarapi": "^0.1.2",
+    "@guarapi/eslint-config-guarapi": "^0.1.3",
     "@swc/cli": "^0.1.65",
     "@swc/core": "^1.5.29",
     "@swc/register": "^0.1.10",
