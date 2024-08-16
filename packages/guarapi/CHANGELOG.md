@@ -1,5 +1,11 @@
 # guarapi
 
+## 1.3.1
+
+### Patch Changes
+
+- [#38](https://github.com/guarapi/guarapi/pull/38) [`8f4c7022598d0595a85c9906dce01edcf29f93da`](https://github.com/guarapi/guarapi/commit/8f4c7022598d0595a85c9906dce01edcf29f93da) Thanks [@joaoneto](https://github.com/joaoneto)! - Replaced getArgsLength with the native length property, improving performance and simplifying the code.
+
 ## 1.3.0
 
 ### Minor Changes
