@@ -8,15 +8,6 @@ declare module '../types' {
   }
 }
 
-function getArgsLength<T>(fn: T) {
-  return (
-    (fn as () => void)
-      .toString()
-      .replace(/\s+/g, '')
-      .match(/\((.*?)\)/)?.[1] || ''
-  ).split(',').length;
-}
-
 const middlewarePlugin: Plugin = (app) => {
   const middlewares: { path: string; handler: Middleware }[] = [];
   const errorMiddlewares: MiddlewareError[] = [];
@@ -27,7 +18,7 @@ const middlewarePlugin: Plugin = (app) => {
       | Middleware
       | MiddlewareError;
 
-    if (getArgsLength(middlewareHandler) <= 3) {
+    if (middlewareHandler.length <= 3) {
       middlewares.push({
         path: middlewarePath,
         handler: (req, res, next) => {
